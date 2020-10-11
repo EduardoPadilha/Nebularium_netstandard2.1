@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tarrasque", "Tarrasque\Tarrasque.csproj", "{F812FEF7-2FA3-4BB1-A5F3-15B788A259A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiamat", "Tiamat\Tiamat.csproj", "{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F812FEF7-2FA3-4BB1-A5F3-15B788A259A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F812FEF7-2FA3-4BB1-A5F3-15B788A259A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F812FEF7-2FA3-4BB1-A5F3-15B788A259A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F812FEF7-2FA3-4BB1-A5F3-15B788A259A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2BD9E39E-5E1B-4AED-9CBC-1D6CB96E969A}
+	EndGlobalSection
+EndGlobal
