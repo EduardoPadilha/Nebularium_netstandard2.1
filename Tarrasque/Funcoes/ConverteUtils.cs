@@ -35,7 +35,7 @@ namespace Nebularium.Tarrasque.Funcoes
             typeof (decimal?),
             typeof (bool?)
         };
-        public static double sempreConverteDouble(object vl, double padraoParaNulo = 0)
+        public static double SempreConverteDouble(object vl, double padraoParaNulo = 0)
         {
             double r = 0;
             try
@@ -48,7 +48,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static decimal sempreConverteDecimal(object vl, decimal padraoParaNulo = 0)
+        public static decimal SempreConverteDecimal(object vl, decimal padraoParaNulo = 0)
         {
             decimal r = 0;
             try
@@ -61,7 +61,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static int sempreConverteInt32(object vl, int padraoParaNulo = 0)
+        public static int SempreConverteInt32(object vl, int padraoParaNulo = 0)
         {
             int r = 0;
             try
@@ -74,7 +74,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static long sempreConverteInt64(object vl, long padraoParaNulo = 0)
+        public static long SempreConverteInt64(object vl, long padraoParaNulo = 0)
         {
             long r = 0;
             try
@@ -87,7 +87,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static DateTime sempreConverteDate(object vl, DateTime padraoParaNulo = default)
+        public static DateTime SempreConverteDate(object vl, DateTime padraoParaNulo = default)
         {
             DateTime r;
             try
@@ -100,7 +100,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static bool sempreConverteBoleano(object vl, bool padraoParaNulo = false)
+        public static bool SempreConverteBoleano(object vl, bool padraoParaNulo = false)
         {
             bool r;
             try
@@ -113,7 +113,7 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static string sempreConverteString(object vl, string padraoParaNulo = "")
+        public static string SempreConverteString(object vl, string padraoParaNulo = "")
         {
             string r;
             try
@@ -126,45 +126,45 @@ namespace Nebularium.Tarrasque.Funcoes
             }
             return r;
         }
-        public static T sempreConverte<T>(object vl, T padraoParaNulo = default)
+        public static T SempreConverte<T>(object vl, T padraoParaNulo = default)
         {
             //            if (typeof(T) == typeof(String))
             //                return sempreConverteString(vl, padraoParaNulo.ToString()).como<T>();
             if (typeof(T) == typeof(double))
-                return sempreConverteDouble(vl, padraoParaNulo.como<double>()).como<T>();
+                return SempreConverteDouble(vl, padraoParaNulo.Como<double>()).Como<T>();
             if (typeof(T) == typeof(decimal))
-                return sempreConverteDecimal(vl, padraoParaNulo.como<decimal>()).como<T>();
+                return SempreConverteDecimal(vl, padraoParaNulo.Como<decimal>()).Como<T>();
             if (typeof(T) == typeof(int))
-                return sempreConverteInt32(vl, padraoParaNulo.como<int>()).como<T>();
+                return SempreConverteInt32(vl, padraoParaNulo.Como<int>()).Como<T>();
             if (typeof(T) == typeof(long))
-                return sempreConverteInt64(vl, padraoParaNulo.como<long>()).como<T>();
+                return SempreConverteInt64(vl, padraoParaNulo.Como<long>()).Como<T>();
             if (typeof(T) == typeof(bool))
-                return sempreConverteBoleano(vl, padraoParaNulo.como<bool>()).como<T>();
+                return SempreConverteBoleano(vl, padraoParaNulo.Como<bool>()).Como<T>();
             if (typeof(T) == typeof(DateTime))
-                return sempreConverteDate(vl, padraoParaNulo.como<DateTime>()).como<T>();
+                return SempreConverteDate(vl, padraoParaNulo.Como<DateTime>()).Como<T>();
             return padraoParaNulo;
         }
-        public static object sempreConverte(object vl, Type tipo, object padraoParaNulo = default)
+        public static object SempreConverte(object vl, Type tipo, object padraoParaNulo = default)
         {
             if (vl == null)
                 return padraoParaNulo;
             if (tipo == typeof(string))
-                return vl.ToString().limpoNuloBranco() ? padraoParaNulo : vl.ToString();
+                return vl.ToString().LimpoNuloBranco() ? padraoParaNulo : vl.ToString();
             if (tipo == typeof(int) || tipo == typeof(int?))
-                return sempreConverteInt32(vl, padraoParaNulo.como<int>());
+                return SempreConverteInt32(vl, padraoParaNulo.Como<int>());
             if (tipo == typeof(decimal) || tipo == typeof(decimal?))
-                return sempreConverteDecimal(vl, padraoParaNulo.como<decimal>());
+                return SempreConverteDecimal(vl, padraoParaNulo.Como<decimal>());
             if (tipo == typeof(bool) || tipo == typeof(bool?))
-                return sempreConverteBoleano(vl, padraoParaNulo.como<bool>());
+                return SempreConverteBoleano(vl, padraoParaNulo.Como<bool>());
             if (tipo == typeof(DateTime) || tipo == typeof(DateTime?))
-                return sempreConverteDate(vl, padraoParaNulo.como<DateTime>());
+                return SempreConverteDate(vl, padraoParaNulo.Como<DateTime>());
             if (tipo == typeof(double) || tipo == typeof(double?))
-                return sempreConverteDouble(vl, padraoParaNulo.como<double>());
+                return SempreConverteDouble(vl, padraoParaNulo.Como<double>());
             if (tipo == typeof(long) || tipo == typeof(long?))
-                return sempreConverteInt64(vl, padraoParaNulo.como<long>());
+                return SempreConverteInt64(vl, padraoParaNulo.Como<long>());
             return padraoParaNulo;
         }
-        public static T sempreConverteEnum<T>(object vl, T padraoParaNulo = default)
+        public static T SempreConverteEnum<T>(object vl, T padraoParaNulo = default)
         {
             try
             {
@@ -176,18 +176,18 @@ namespace Nebularium.Tarrasque.Funcoes
                 return padraoParaNulo.Equals(default(T)) ? (T)Enum.GetValues(typeof(T)).GetValue(0) : padraoParaNulo;
             }
         }
-        public static T sempreConverteEnumPorString<T>(string valor, bool caseSensitive = false)
+        public static T SempreConverteEnumPorString<T>(string valor, bool caseSensitive = false)
         {
             foreach (var e in Enum.GetValues(typeof(T)))
             {
                 if (caseSensitive)
                 {
-                    if ((e as Enum).descricao().Equals(valor)) return e.como<T>();
+                    if ((e as Enum).Descricao().Equals(valor)) return e.Como<T>();
                 }
                 else
-                    if ((e as Enum).descricao().ToLower().Equals(valor.ToLower())) return e.como<T>();
+                    if ((e as Enum).Descricao().ToLower().Equals(valor.ToLower())) return e.Como<T>();
             }
-            return 0.como<T>();
+            return 0.Como<T>();
         }
     }
 }
