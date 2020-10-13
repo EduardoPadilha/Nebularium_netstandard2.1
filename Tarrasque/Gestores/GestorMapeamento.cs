@@ -2,7 +2,7 @@
 using Nebularium.Tarrasque.Interfaces;
 using System.Collections.Generic;
 
-namespace Nebularium.Tarrasque
+namespace Nebularium.Tarrasque.Gestores
 {
     public abstract class GestorMapeamento<T> : IGestorMapeamento where T : IGestorMapeamento, new()
     {

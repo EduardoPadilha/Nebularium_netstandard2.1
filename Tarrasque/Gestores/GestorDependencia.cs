@@ -1,7 +1,7 @@
 ﻿using Nebularium.Tarrasque.Interfaces;
 using System;
 
-namespace Nebularium.Tarrasque
+namespace Nebularium.Tarrasque.Gestores
 {
     public abstract class GestorDependencia : IGestorDependencia
     {
