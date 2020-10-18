@@ -144,4 +144,10 @@
   <data name="PessoaId" xml:space="preserve">
     <value>CPF</value>
   </data>
+  <data name="PessoaNascimento" xml:space="preserve">
+    <value>Data de Nascimento</value>
+  </data>
+  <data name="PessoaNomeSobrenome" xml:space="preserve">
+    <value>Nome completo</value>
+  </data>
 </root>

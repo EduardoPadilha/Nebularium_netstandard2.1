@@ -2,7 +2,7 @@
 using Nebularium.Tarrasque.Recursos;
 using Xunit.Abstractions;
 
-namespace Nebularium.Tellurian
+namespace Nebularium.Tellurian.Recursos
 {
     public class TesteBase
     {

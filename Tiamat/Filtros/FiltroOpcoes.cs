@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Nebularium.Tiamat.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Nebularium.Tiamat.Filtros
 {
-    public class FiltroOpcoes<TEntidade>
+    public class FiltroOpcoes<TEntidade> : IFiltroOpcoes<TEntidade>
     {
         private readonly Dictionary<string, Expression<Func<TEntidade, bool>>> condicoes;
         private readonly string regra;
@@ -13,7 +14,7 @@ namespace Nebularium.Tiamat.Filtros
             this.regra = regra;
             this.condicoes = condicoes;
         }
-        public void sobCondicional(Expression<Func<TEntidade, bool>> condicao)
+        public void SobCondicional(Expression<Func<TEntidade, bool>> condicao)
         {
             condicoes.Add(regra, condicao);
         }

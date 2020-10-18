@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Nebularium.Tarrasque.Extensoes;
+﻿using Nebularium.Tarrasque.Extensoes;
+using Nebularium.Tellurian.Mock;
+using Nebularium.Tellurian.Recursos;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Nebularium.Tellurian.Tiamat.DisplayName
+namespace Nebularium.Tellurian.Tiamat.Mock
 {
-    public class DisplayName_Test : TesteBase
+    public class DisplayNameTest : TesteBase
     {
-        public DisplayName_Test(ITestOutputHelper saida) : base(saida)
+        public DisplayNameTest(ITestOutputHelper saida) : base(saida)
         {
         }
 
         [Fact]
         public void GestorConfiguracao_test()
         {
+            saida.WriteLine(nameof(Pessoa));
             Pessoa p = new Pessoa();
             Endereco e = new Endereco();
             saida.WriteLine($"Saída: {p.ObterDisplay(prop => prop.Id)} - {p.ObterDisplay(prop => prop.NomeSobrenome)} - {p.ObterDisplay(prop => prop.Genero)}");

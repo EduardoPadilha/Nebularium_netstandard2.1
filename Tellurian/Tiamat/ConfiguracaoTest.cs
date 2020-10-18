@@ -1,6 +1,7 @@
 ﻿using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tellurian.Recursos;
 using Xunit;
 using Xunit.Abstractions;
 

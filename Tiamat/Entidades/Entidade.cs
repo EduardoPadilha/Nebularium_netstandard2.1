@@ -1,9 +1,11 @@
 ﻿using Nebularium.Tiamat.Interfaces;
+using System.ComponentModel;
 
 namespace Nebularium.Tiamat.Entidades
 {
     public abstract class Entidade : IEntidade
     {
+        [DisplayName]
         public string Id { get; set; }
 
         public override bool Equals(object obj)

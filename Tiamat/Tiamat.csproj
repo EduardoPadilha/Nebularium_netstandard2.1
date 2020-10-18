@@ -9,6 +9,7 @@
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.0</FileVersion>
     <Version>0.0.1</Version>
+    <Description>Biblioteca contendo inteligência central e orquestração para as demais bibliotecas Nebularium.</Description>
   </PropertyGroup>
 
   <ItemGroup>

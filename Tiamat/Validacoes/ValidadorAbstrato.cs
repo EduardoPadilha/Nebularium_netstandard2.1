@@ -19,37 +19,26 @@ namespace Nebularium.Tiamat.Validacoes
         {
             ValidatorOptions.Global.DisplayNameResolver = (tipo, membro, exp) => displayNameExtrator.ObterDisplay(tipo, membro);
         }
-        protected void validarConfiguracao()
-        {
-            if (configurado) return;
-            configurar();
-            configurado = true;
-        }
-        public abstract void configurar();
         public virtual ValidacaoResultado Validar(TEntidade entidade)
         {
-            validarConfiguracao();
-            ValidationResult r = Validate(entidade);
+            ValidationResult r = this.Validate(entidade);
             var resultado = r.Como<ValidacaoResultado>();
             return resultado;
         }
         public virtual ValidacaoResultado Validar(TEntidade entidade, string rulerSet)
         {
-            validarConfiguracao();
             ValidationResult r = this.Validate(entidade, options => options.IncludeRuleSets(rulerSet));
             var resultado = r.Como<ValidacaoResultado>();
             return resultado;
         }
         public virtual ValidacaoResultado ValidarPropriedade(TEntidade entidade, Expression<Func<TEntidade, object>> propriedade)
         {
-            validarConfiguracao();
             ValidationResult r = this.Validate(entidade, options => options.IncludeProperties(propriedade));
             var resultado = r.Como<ValidacaoResultado>();
             return resultado;
         }
         public virtual List<PropertyRule> PegarRegras()
         {
-            validarConfiguracao();
             var regras = CreateDescriptor();
             var propertyInfos = typeof(TEntidade).GetRuntimeProperties();
             var validadores = propertyInfos.SelectMany(inf => regras.GetRulesForMember(inf.Name).Select(r => (PropertyRule)r)).ToList();

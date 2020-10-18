@@ -140,5 +140,23 @@ namespace Nebularium.Tellurian.Properties {
                 return ResourceManager.GetString("PessoaId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Data de Nascimento.
+        /// </summary>
+        public static string PessoaNascimento {
+            get {
+                return ResourceManager.GetString("PessoaNascimento", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Nome completo.
+        /// </summary>
+        public static string PessoaNomeSobrenome {
+            get {
+                return ResourceManager.GetString("PessoaNomeSobrenome", resourceCulture);
+            }
+        }
     }
 }

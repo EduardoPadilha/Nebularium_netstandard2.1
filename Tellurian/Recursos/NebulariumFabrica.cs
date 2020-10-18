@@ -1,11 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Nebularium.Behemoth.Mongo;
 using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tarrasque.Recursos;
+using Nebularium.Tellurian.Behemoth.Repositorios;
+using Nebularium.Tellurian.Mock;
+using Nebularium.Tellurian.Mock.Interfaces;
+using Nebularium.Tiamat.Interfaces;
 using SimpleInjector;
 using System;
 
-namespace Nebularium.Tellurian
+namespace Nebularium.Tellurian.Recursos
 {
     public class NebulariumFabrica : GestorDependencia<NebulariumFabrica>
     {
@@ -19,6 +25,14 @@ namespace Nebularium.Tellurian
 
             Container.Register(() => configuracao, Lifestyle.Singleton);
             Container.Register<IGestorConfiguracao, GestorConfiguracaoPadrao>(Lifestyle.Singleton);
+
+            Container.Register<IDisplayNameExtrator>(() => new DisplayNameExtratorPadrao(), Lifestyle.Singleton);
+            Container.Register<IValidador<Pessoa>, PessoaValidador>(Lifestyle.Singleton);
+            Container.Register<IValidador<Endereco>, EnderecoValidador>(Lifestyle.Singleton);
+
+            Container.Register<IDbConfigs>(() => new DBConfig(configuracao), Lifestyle.Singleton);
+            Container.Register<IMongoContext, TellurianContext>(Lifestyle.Singleton);
+            Container.Register<IPessoaConsultaRepositorio, PessoaConsultaRepositorio>();
 
             Container.Verify();
 

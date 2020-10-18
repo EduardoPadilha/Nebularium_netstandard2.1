@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tarrasque", "Tarrasque\Tarr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tiamat", "Tiamat\Tiamat.csproj", "{C8750CA3-ACB0-4006-ABFA-D9A0A2F26057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tellurian", "Tellurian\Tellurian.csproj", "{BF8EB4DE-9A23-466A-AECE-CCDEC550897D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tellurian", "Tellurian\Tellurian.csproj", "{BF8EB4DE-9A23-466A-AECE-CCDEC550897D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Behemoth", "Behemoth\Behemoth.csproj", "{DD7A845A-255D-43FD-A547-6A2E03186B5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Behemoth.Mongo", "Behemoth.Mongo\Behemoth.Mongo.csproj", "{8DF7B467-13DC-412A-B43B-FF62BE8E07C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{BF8EB4DE-9A23-466A-AECE-CCDEC550897D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF8EB4DE-9A23-466A-AECE-CCDEC550897D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF8EB4DE-9A23-466A-AECE-CCDEC550897D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD7A845A-255D-43FD-A547-6A2E03186B5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD7A845A-255D-43FD-A547-6A2E03186B5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD7A845A-255D-43FD-A547-6A2E03186B5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD7A845A-255D-43FD-A547-6A2E03186B5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DF7B467-13DC-412A-B43B-FF62BE8E07C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DF7B467-13DC-412A-B43B-FF62BE8E07C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DF7B467-13DC-412A-B43B-FF62BE8E07C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF7B467-13DC-412A-B43B-FF62BE8E07C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

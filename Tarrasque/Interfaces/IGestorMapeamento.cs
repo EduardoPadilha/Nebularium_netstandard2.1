@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 
 namespace Nebularium.Tarrasque.Interfaces
@@ -7,6 +8,8 @@ namespace Nebularium.Tarrasque.Interfaces
     {
         IMapper Mapper { get; }
         IReadOnlyList<Profile> PerfisConfigurados { get; }
+        IReadOnlyList<Action<IMapperConfigurationExpression>> ConfigsAdicionais { get; }
         void AdicionarPerfil<TPerfil>() where TPerfil : Profile, new();
+        void AdicionarConfig(Action<IMapperConfigurationExpression> config);
     }
 }
