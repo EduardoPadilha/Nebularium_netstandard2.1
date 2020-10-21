@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Extensoes;
 using System;
@@ -12,6 +13,8 @@ namespace Nebularium.Behemoth.Mongo
         private readonly MongoClient _cliente;
         protected IMongoDatabase _database { get; }
         protected IDbConfigs _mongoConfig { get; set; }
+
+        public IMongoDatabase OberDataBase => _database;
 
         protected MongoContext(IDbConfigs mongoConfig)
         {
@@ -30,10 +33,10 @@ namespace Nebularium.Behemoth.Mongo
                 throw new Exception("Não foi possível se conectar com o servidor de banco.", ex);
             }
         }
-        public IQueryable<T> ObterColecao<T>()
+        public IMongoQueryable<T> ObterColecao<T>()
         {
             var nome = typeof(T).ObterAnotacao<NomeColecaoAttribute>()?.Nome;
-            return _database.GetCollection<T>(nome.LimpoNuloBranco() ? nameof(T) : nome).AsQueryable<T>();
+            return _database.GetCollection<T>(nome.LimpoNuloBranco() ? nameof(T) : nome).AsQueryable();
         }
 
         public virtual void Dispose()

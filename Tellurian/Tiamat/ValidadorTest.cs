@@ -25,10 +25,10 @@ namespace Nebularium.Tellurian.Tiamat
             Pessoa.PessoasValidacao.ForEach(pessoa =>
             {
                 var validacao = pessoaValidador.Validar(pessoa);
-                saida.WriteLine($"=> {pessoa.NomeSobrenome} - [{validacao.Valido}]");
+                Console.WriteLine($"=> {pessoa.NomeSobrenome} - [{validacao.Valido}]");
                 foreach (var erro in validacao.Erros)
-                    saida.WriteLine($"{erro.NomePropriedade}: {erro.Mensagem}");
-                saida.WriteLine($"========================>\n");
+                    Console.WriteLine($"{erro.NomePropriedade}: {erro.Mensagem}");
+                Console.WriteLine($"========================>\n");
             });
         }
 
@@ -38,10 +38,10 @@ namespace Nebularium.Tellurian.Tiamat
             Pessoa.PessoasValidacao.Where(c => c.Enderecos != null).SelectMany(e => e.Enderecos).ToList().ForEach(endereco =>
             {
                 var validacao = enderecoValidador.Validar(endereco);
-                saida.WriteLine($"=> {endereco.Cep} - [{validacao.Valido}]");
+                Console.WriteLine($"=> {endereco.Cep} - [{validacao.Valido}]");
                 foreach (var erro in validacao.Erros)
-                    saida.WriteLine($"{erro.NomePropriedade}: {erro.Mensagem}");
-                saida.WriteLine($"========================>\n");
+                    Console.WriteLine($"{erro.NomePropriedade}: {erro.Mensagem}");
+                Console.WriteLine($"========================>\n");
             });
         }
     }

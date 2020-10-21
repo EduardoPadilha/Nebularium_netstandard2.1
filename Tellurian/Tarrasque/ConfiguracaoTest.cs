@@ -5,7 +5,7 @@ using Nebularium.Tellurian.Recursos;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Nebularium.Tellurian.Tiamat.Configuracoes
+namespace Nebularium.Tellurian.Tarrasque
 {
     public class ConfiguracaoTest : TesteBase
     {

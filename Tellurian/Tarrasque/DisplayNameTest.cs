@@ -4,7 +4,7 @@ using Nebularium.Tellurian.Recursos;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Nebularium.Tellurian.Tiamat.Mock
+namespace Nebularium.Tellurian.Tarrasque
 {
     public class DisplayNameTest : TesteBase
     {
@@ -15,10 +15,10 @@ namespace Nebularium.Tellurian.Tiamat.Mock
         [Fact]
         public void GestorConfiguracao_test()
         {
-            saida.WriteLine(nameof(Pessoa));
+            Console.WriteLine(nameof(Pessoa));
             Pessoa p = new Pessoa();
             Endereco e = new Endereco();
-            saida.WriteLine($"Saída: {p.ObterDisplay(prop => prop.Id)} - {p.ObterDisplay(prop => prop.NomeSobrenome)} - {p.ObterDisplay(prop => prop.Genero)}");
+            Console.WriteLine($"Saída: {p.ObterDisplay(prop => prop.Id)} - {p.ObterDisplay(prop => prop.NomeSobrenome)} - {p.ObterDisplay(prop => prop.Genero)}");
             Assert.Equal("CPF", p.ObterDisplay(prop => prop.Id));
             Assert.Equal("Nome Sobrenome", p.ObterDisplay(prop => prop.NomeSobrenome));
             Assert.Equal("Gênero", p.ObterDisplay(prop => prop.Genero));
