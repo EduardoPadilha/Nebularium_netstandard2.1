@@ -7,7 +7,7 @@
     <PackageId>Tarrasque</PackageId>
     <Company>Deflagra</Company>
     <Product>Nebularium.Tarrasque</Product>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Description>Biblioteca com funções, extensões e outros utilitários difíceis de matar no Nebulariun.</Description>
   </PropertyGroup>
 

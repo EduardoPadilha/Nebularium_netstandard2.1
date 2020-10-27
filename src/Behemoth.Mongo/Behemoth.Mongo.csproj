@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Nebularium.Behemoth.Mongo</RootNamespace>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Behemoth.Mongo</Product>
