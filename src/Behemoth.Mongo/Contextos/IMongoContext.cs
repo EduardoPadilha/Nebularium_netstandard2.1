@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using Nebularium.Tiamat.Interfaces;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Contextos
 {
     public interface IMongoContext : IContext
     {

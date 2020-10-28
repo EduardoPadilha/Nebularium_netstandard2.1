@@ -16,9 +16,6 @@ namespace Nebularium.Tellurian.Tarrasque
         [Fact]
         public void TimezoneTest()
         {
-            var time = TimeZone.CurrentTimeZone;
-            Console.WriteLine($"{nameof(time).Comp()}: {time.StandardName}");
-
             var timezoneLocal = TimeZoneInfo.Local;
             Console.WriteLine($"{nameof(timezoneLocal).Comp()}: {timezoneLocal.StandardName} | {timezoneLocal.BaseUtcOffset} | {timezoneLocal.DisplayName}");
 

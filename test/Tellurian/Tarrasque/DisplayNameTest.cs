@@ -20,7 +20,7 @@ namespace Nebularium.Tellurian.Tarrasque
             Endereco e = new Endereco();
             Console.WriteLine($"Saída: {p.ObterDisplay(prop => prop.Id)} - {p.ObterDisplay(prop => prop.NomeSobrenome)} - {p.ObterDisplay(prop => prop.Genero)}");
             Assert.Equal("CPF", p.ObterDisplay(prop => prop.Id));
-            Assert.Equal("Nome Sobrenome", p.ObterDisplay(prop => prop.NomeSobrenome));
+            Assert.Equal("Nome completo", p.ObterDisplay(prop => prop.NomeSobrenome));
             Assert.Equal("Gênero", p.ObterDisplay(prop => prop.Genero));
             Assert.Equal("Endereços", p.ObterDisplay(prop => prop.Enderecos));
 

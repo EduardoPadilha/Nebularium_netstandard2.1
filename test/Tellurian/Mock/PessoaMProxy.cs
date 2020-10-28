@@ -1,4 +1,5 @@
-﻿using Nebularium.Behemoth.Mongo;
+﻿using Nebularium.Behemoth.Mongo.Configuracoes;
+using Nebularium.Behemoth.Mongo.Mapeamento;
 using System;
 
 namespace Nebularium.Tellurian.Mock

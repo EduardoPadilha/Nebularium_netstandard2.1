@@ -1,4 +1,4 @@
-﻿using Nebularium.Behemoth.Mongo;
+﻿using Nebularium.Behemoth.Mongo.Contextos;
 using Nebularium.Tarrasque.Configuracoes;
 
 namespace Nebularium.Tellurian.Recursos

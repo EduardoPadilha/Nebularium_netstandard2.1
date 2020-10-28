@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Nebularium.Tiamat.Interfaces;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Mapeamento
 {
     public class EntidadeMProxy : IEntidade
     {

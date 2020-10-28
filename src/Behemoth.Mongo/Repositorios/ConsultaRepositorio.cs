@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Nebularium.Behemoth.Mongo.Contextos;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Interfaces;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Repositorios
 {
     public abstract class ConsultaRepositorio<TEntidade, TProxy> : IConsultaRepositorio<TEntidade>
         where TEntidade : IEntidade, new()
