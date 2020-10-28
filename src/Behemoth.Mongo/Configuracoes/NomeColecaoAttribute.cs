@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Configuracoes
 {
     [AttributeUsage(AttributeTargets.Class)
 ]

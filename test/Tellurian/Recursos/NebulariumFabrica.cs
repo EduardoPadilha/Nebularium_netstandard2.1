@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Nebularium.Behemoth.Mongo;
+using Nebularium.Behemoth.Mongo.Contextos;
 using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tarrasque.Interfaces;

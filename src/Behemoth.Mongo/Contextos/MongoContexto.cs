@@ -1,10 +1,11 @@
 ﻿using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using Nebularium.Behemoth.Mongo.Configuracoes;
 using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Extensoes;
 using System;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Contextos
 {
     public abstract class MongoContexto : IMongoContext
     {

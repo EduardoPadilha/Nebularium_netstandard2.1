@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using Nebularium.Behemoth.Mongo.Contextos;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Interfaces;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nebularium.Behemoth.Mongo
+namespace Nebularium.Behemoth.Mongo.Repositorios
 {
     public class ComandoRepositorio<TEntidade, TProxy> : IComandoRepositorio<TEntidade>
         where TEntidade : IEntidade, new()
