@@ -5,7 +5,7 @@ using System;
 namespace Nebularium.Tellurian.Mock
 {
     [NomeColecao("PessoasTeste")]
-    public class PessoaMProxy : EntidadeMProxy
+    public class PessoaMProxy : EntidadeMapeamento
     {
         public string NomeSobrenome { get; set; }
         public Genero Genero { get; set; }
