@@ -4,7 +4,7 @@ using Nebularium.Tiamat.Interfaces;
 
 namespace Nebularium.Behemoth.Mongo.Mapeamento
 {
-    public class EntidadeMProxy : IEntidade
+    public class EntidadeMapeamento : IEntidade
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -19,7 +19,7 @@ namespace Nebularium.Behemoth.Mongo.Mapeamento
             return Equals((IEntidade)obj);
         }
 
-        public virtual bool Equals(EntidadeMProxy obj)
+        public virtual bool Equals(EntidadeMapeamento obj)
         {
             return obj.Id == Id;
         }
