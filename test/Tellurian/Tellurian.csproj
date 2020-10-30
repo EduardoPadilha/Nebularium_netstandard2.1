@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\src\Behemoth.Mongo\Behemoth.Mongo.csproj" />
     <ProjectReference Include="..\..\src\Tarrasque\Tarrasque.csproj" />
     <ProjectReference Include="..\..\src\Tiamat\Tiamat.csproj" />
+    <ProjectReference Include="..\..\Weaver\Weaver.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Weaver\" />
   </ItemGroup>
 
 </Project>
