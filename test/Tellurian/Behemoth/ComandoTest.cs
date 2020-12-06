@@ -1,7 +1,7 @@
 ﻿using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Gestores;
-using Nebularium.Tellurian.Mock;
-using Nebularium.Tellurian.Mock.Interfaces;
+using Nebularium.Tellurian.Drone.Entidades;
+using Nebularium.Tellurian.Drone.Interfaces;
 using Nebularium.Tellurian.Recursos;
 using System;
 using System.Collections.Generic;

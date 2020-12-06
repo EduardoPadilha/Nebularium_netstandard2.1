@@ -1,0 +1,159 @@
+﻿using Microsoft.Extensions.Logging;
+using Nebularium.Weaver.Interfaces;
+using Nebularium.Weaver.RabbitMQ.Interfaces;
+using Newtonsoft.Json;
+using Polly;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
+using System;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Nebularium.Weaver.RabbitMQ
+{
+    public class BarramentoEvento : IBarramentoEvento
+    {
+        const string BROKER_NAME = "noctua_event_bus";
+        private readonly IConexaoPersistenteRabbitMQ _conexao;
+        private readonly ILogger _logger;
+        private readonly IGerenciadorAssinatura _gerenciadorAssinatura;
+        private readonly int _retryCount;
+        private string _filaNome;
+        private IModel _canalConsumidor;
+        //private readonly string _exchangeName;
+        public BarramentoEvento(IConexaoPersistenteRabbitMQ connection, ILogger logger,
+            IGerenciadorAssinatura gerenciadorAssinatura, string filaNome = null, int retryCount = 5)
+        {
+
+            _conexao = connection
+                ?? throw new ArgumentNullException(nameof(connection));
+
+            _logger = logger
+                ?? throw new ArgumentNullException(nameof(logger));
+
+            //_exchangeName = exchangeName;
+            _filaNome = filaNome;
+            _retryCount = retryCount;
+
+            _gerenciadorAssinatura = gerenciadorAssinatura ?? new GerenciadorAssinatura();
+            _gerenciadorAssinatura.QuandoEventoRemovido += QuandoEventoRemovido;
+            _gerenciadorAssinatura.QuandoEventoAdicionado += QuandoEventoAdicionado;
+
+            _canalConsumidor = CriaCanalConsumidor();
+        }
+
+        public void Publicar(IEvento evento)
+        {
+            if (!_conexao.EstaConectado)
+                _conexao.TentaConectar();
+
+            var policy = Policy.Handle<SocketException>()
+                .Or<BrokerUnreachableException>()
+                .WaitAndRetry(_retryCount, tentarNnovamente => TimeSpan.FromSeconds(Math.Pow(2, tentarNnovamente)),
+                    (ex, tempo) => { _logger.LogWarning(ex.ToString()); }
+                );
+
+            var eventoNome = evento.GetType().FullName;
+
+            using (var canal = _conexao.CriaModelo())
+            {
+                canal.ExchangeDeclare(BROKER_NAME, ExchangeType.Direct);
+
+                var message = JsonConvert.SerializeObject(evento);
+                var body = Encoding.UTF8.GetBytes(message);
+
+                policy.Execute(() =>
+                {
+                    var properties = canal.CreateBasicProperties();
+                    properties.DeliveryMode = 2; // persistent
+                    canal.BasicPublish(BROKER_NAME, eventoNome, true, properties, body);
+                });
+            }
+        }
+        public void Assinar<TEvento, TEventoManipulado>()
+            where TEvento : IEvento
+            where TEventoManipulado : IEventoManipulador<TEvento>
+        {
+            _gerenciadorAssinatura.AddAssinatura<TEvento, TEventoManipulado>();
+        }
+        public void CancelarAssinatura<TEvento, TEventoManipulado>()
+            where TEvento : IEvento
+            where TEventoManipulado : IEventoManipulador<TEvento>
+        {
+            _gerenciadorAssinatura.RemoverAssinatura<TEvento, TEventoManipulado>();
+        }
+        #region Suportes
+
+        private void QuandoEventoAdicionado(object _, string tipo)
+        {
+            if (!_conexao.EstaConectado)
+                _conexao.TentaConectar();
+
+            using (var canal = _conexao.CriaModelo())
+                canal.QueueBind(_filaNome, BROKER_NAME, tipo);
+        }
+        private void QuandoEventoRemovido(object _, string tipo)
+        {
+            if (!_conexao.EstaConectado)
+                _conexao.TentaConectar();
+
+            using (var canal = _conexao.CriaModelo())
+            {
+                canal.QueueUnbind(_filaNome, BROKER_NAME, tipo);
+
+                if (!_gerenciadorAssinatura.EstaVazio) return;
+
+                _filaNome = string.Empty;
+                _canalConsumidor.Close();
+            }
+        }
+        private IModel CriaCanalConsumidor()
+        {
+            if (!_conexao.EstaConectado)
+                _conexao.TentaConectar();
+
+            var canal = _conexao.CriaModelo();
+            canal.ExchangeDeclare(BROKER_NAME, ExchangeType.Direct);
+            canal.QueueDeclare(_filaNome, durable: true,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            var consumidor = new AsyncEventingBasicConsumer(canal);
+            consumidor.Received += async (model, ea) =>
+            {
+                var eventoNome = ea.RoutingKey;
+                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+                await ManipularEvento(eventoNome, message);
+            };
+
+            canal.BasicConsume(_filaNome, false, consumidor);
+
+            canal.CallbackException += (sender, ea) =>
+            {
+                _canalConsumidor.Dispose();
+                _canalConsumidor = CriaCanalConsumidor();
+            };
+
+            return canal;
+        }
+        private async Task ManipularEvento(string tipoEvento, string mensagem)
+        {
+            if (!_gerenciadorAssinatura.TemAssinaturaParaEvento(tipoEvento))
+                return;
+
+            var assinaturas = _gerenciadorAssinatura.ObterManipuladores(tipoEvento);
+            foreach (var assinatura in assinaturas)
+                await assinatura.Resolver(mensagem);
+        }
+
+        #endregion
+        public void Dispose()
+        {
+            _canalConsumidor?.Dispose();
+        }
+    }
+}

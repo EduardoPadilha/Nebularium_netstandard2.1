@@ -18,9 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="SimpleInjector" Version="5.0.3" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
@@ -30,7 +31,9 @@
     <ProjectReference Include="..\..\src\Behemoth.Mongo\Behemoth.Mongo.csproj" />
     <ProjectReference Include="..\..\src\Tarrasque\Tarrasque.csproj" />
     <ProjectReference Include="..\..\src\Tiamat\Tiamat.csproj" />
-    <ProjectReference Include="..\..\Weaver\Weaver.csproj" />
+    <ProjectReference Include="..\..\src\Weaver.RabbitMQ\Weaver.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\src\Weaver\Weaver.csproj" />
+    <ProjectReference Include="..\Tellurian.Drone\Tellurian.Drone.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,10 +55,6 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Weaver\" />
   </ItemGroup>
 
 </Project>

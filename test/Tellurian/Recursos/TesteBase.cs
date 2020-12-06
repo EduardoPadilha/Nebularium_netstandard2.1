@@ -1,5 +1,6 @@
 ﻿using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Recursos;
+using Nebularium.Tellurian.Drone.Recursos;
 using Xunit.Abstractions;
 
 namespace Nebularium.Tellurian.Recursos

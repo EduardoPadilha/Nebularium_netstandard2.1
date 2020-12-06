@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Nebularium.Tarrasque.Gestores;
-using Nebularium.Tellurian.Mock;
+using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Recursos;
 using Nebularium.Tiamat.Interfaces;
 using System.Linq;
