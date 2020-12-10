@@ -55,10 +55,12 @@ namespace Nebularium.Weaver.RabbitMQ
                     (ex, tempo) => { _logger.LogWarning(ex.ToString()); }
                 );
 
-            var eventoNome = evento.GetType().FullName;
+            var eventoNome = evento.GetType().Name;
 
+            _logger.LogTrace($"Criando canal para publicar evento: [{eventoNome}] - {evento.Id}");
             using (var canal = _conexao.CriaModelo())
             {
+                _logger.LogTrace($"Declarando RabbitMQ exchange para publicar evento: {evento.Id}");
                 canal.ExchangeDeclare(BROKER_NAME, ExchangeType.Direct);
 
                 var message = JsonConvert.SerializeObject(evento);
@@ -68,6 +70,7 @@ namespace Nebularium.Weaver.RabbitMQ
                 {
                     var properties = canal.CreateBasicProperties();
                     properties.DeliveryMode = 2; // persistent
+                    _logger.LogTrace($"Publicando evento no RabbitMQ: {evento.Id}");
                     canal.BasicPublish(BROKER_NAME, eventoNome, true, properties, body);
                 });
             }
@@ -126,8 +129,15 @@ namespace Nebularium.Weaver.RabbitMQ
             {
                 var eventoNome = ea.RoutingKey;
                 var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-
-                await ManipularEvento(eventoNome, message);
+                try
+                {
+                    await ManipularEvento(eventoNome, message);
+                    canal.BasicAck(ea.DeliveryTag, false);
+                }
+                catch (Exception)
+                {
+                    canal.BasicNack(ea.DeliveryTag, false, false);
+                }
             };
 
             canal.BasicConsume(_filaNome, false, consumidor);

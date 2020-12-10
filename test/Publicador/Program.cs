@@ -12,7 +12,7 @@ namespace Publicador
         static void Main(string[] args)
         {
             var p = new Program();
-            Console.WriteLine("Serviço startado");
+            Console.WriteLine("Publicador startado");
             var entrada = "";
             while (!entrada.ToLower().Equals("sair"))
             {
@@ -34,7 +34,7 @@ namespace Publicador
         {
             NebulariumFabrica.Inicializar();
             var fabrica = (NebulariumFabrica)NebulariumFabrica.Instancia;
-            fabrica.ConfiguracaoesAdicionais(ServicosExtensao.ConfigurarBarramentoEvento);
+            //fabrica.ConfiguracaoesAdicionais(ServicosExtensao.ConfigurarBarramentoEvento);
             barramento = GestorDependencia.Instancia.ObterInstancia<IBarramentoEvento>();
         }
 
