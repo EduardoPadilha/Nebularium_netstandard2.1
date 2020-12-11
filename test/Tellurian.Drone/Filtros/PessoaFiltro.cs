@@ -1,9 +1,10 @@
 ﻿using Nebularium.Tarrasque.Extensoes;
+using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tiamat.Filtros;
 using System;
 using System.Linq;
 
-namespace Nebularium.Tellurian.Mock
+namespace Nebularium.Tellurian.Drone.Filtros
 {
     public class PessoaFiltro : FiltroAbstrato<Pessoa>
     {

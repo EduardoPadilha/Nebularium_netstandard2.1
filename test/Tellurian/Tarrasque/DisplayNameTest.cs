@@ -1,4 +1,5 @@
 ﻿using Nebularium.Tarrasque.Extensoes;
+using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Mock;
 using Nebularium.Tellurian.Recursos;
 using Xunit;

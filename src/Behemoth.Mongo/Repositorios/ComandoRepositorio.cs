@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using Nebularium.Behemoth.Mongo.Contextos;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Interfaces;
@@ -14,29 +15,55 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         where TProxy : IEntidade, new()
     {
         protected IMongoContext context { get; }
-        public ComandoRepositorio(IMongoContext context)
+        private readonly ILogger logger;
+        public ComandoRepositorio(IMongoContext context, ILogger<TEntidade> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         public Task AdicionarAsync(TEntidade entidade)
         {
-            var proxy = entidade.Como<TProxy>();
-            return context.ObterColecao<TProxy>().InsertOneAsync(proxy)
-                 .ContinueWith(e => entidade.Injete(proxy));
+            try
+            {
+                var proxy = entidade.Como<TProxy>();
+                return context.ObterColecao<TProxy>().InsertOneAsync(proxy)
+                     .ContinueWith(e => entidade.Injete(proxy));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao adicionar entidade");
+                throw;
+            }
         }
 
         public Task AdicionarAsync(IEnumerable<TEntidade> entidades)
         {
-            var proxys = entidades.Como<IEnumerable<TProxy>>();
-            return context.ObterColecao<TProxy>().InsertManyAsync(proxys)
-                 .ContinueWith(e => entidades.Injete(proxys));
+            try
+            {
+                var proxys = entidades.Como<IEnumerable<TProxy>>();
+                return context.ObterColecao<TProxy>().InsertManyAsync(proxys)
+                     .ContinueWith(e => entidades.Injete(proxys));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao adicionar entidade");
+                throw;
+            }
         }
 
         public Task AtualizarAsync(TEntidade entidade)
         {
-            var proxy = entidade.Como<TProxy>();
-            return context.ObterColecao<TProxy>().ReplaceOneAsync(x => x.Id == entidade.Id, proxy);
+            try
+            {
+                var proxy = entidade.Como<TProxy>();
+                return context.ObterColecao<TProxy>().ReplaceOneAsync(x => x.Id == entidade.Id, proxy);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao adicionar entidade");
+                throw;
+            }
         }
 
         //public Task AtualizarAsync(IEnumerable<TEntidade> entidades)
@@ -48,13 +75,29 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
 
         public Task RemoverAsync(TEntidade entidade)
         {
-            return context.ObterColecao<TProxy>().DeleteOneAsync(x => x.Id == entidade.Id);
+            try
+            {
+                return context.ObterColecao<TProxy>().DeleteOneAsync(x => x.Id == entidade.Id);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao adicionar entidade");
+                throw;
+            }
         }
 
         public Task RemoverAsync(IEnumerable<TEntidade> entidades)
         {
-            var proxyIds = entidades.Select(e => e.Id);
-            return context.ObterColecao<TProxy>().DeleteManyAsync(x => proxyIds.Contains(x.Id));
+            try
+            {
+                var proxyIds = entidades.Select(e => e.Id);
+                return context.ObterColecao<TProxy>().DeleteManyAsync(x => proxyIds.Contains(x.Id));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Erro ao adicionar entidade");
+                throw;
+            }
         }
     }
 }

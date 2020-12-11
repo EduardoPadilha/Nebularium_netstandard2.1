@@ -1,4 +1,5 @@
-﻿using Nebularium.Tellurian.Mock;
+﻿using Nebularium.Tellurian.Drone.Entidades;
+using Nebularium.Tellurian.Drone.Filtros;
 using Nebularium.Tellurian.Recursos;
 using System.Linq;
 using Xunit;

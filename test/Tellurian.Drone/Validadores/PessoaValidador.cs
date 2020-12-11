@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tiamat.Interfaces;
 using Nebularium.Tiamat.Validacoes;
 
