@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nebularium.Tarrasque.Gestores;
+using Nebularium.Tellurian.Drone.Manipuladores;
 using System;
 
 namespace Nebularium.Tellurian.Drone.Recursos
@@ -30,7 +31,8 @@ namespace Nebularium.Tellurian.Drone.Recursos
                 .AddServicos()
                 .AddDbContexto(configuracao)
                 .AddIntegrationServices(configuracao)
-                .AddBarramentoEventos(configuracao);
+                .AddBarramentoEventos(configuracao)
+                .AddTransient<CadastrarPessoaManipulador>();
 
             Container = Servicos.BuildServiceProvider();
         }

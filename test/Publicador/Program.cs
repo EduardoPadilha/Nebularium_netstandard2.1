@@ -18,7 +18,7 @@ namespace Publicador
             {
                 Console.WriteLine("Digite um evento");
                 entrada = Console.ReadLine();
-                var pessoa = "";
+                string pessoa;
                 if (string.IsNullOrWhiteSpace(entrada))
                     pessoa = "Fulaninho de tal";
                 else

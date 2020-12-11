@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace Nebularium.Weaver.RabbitMQ
+namespace Nebularium.Weaver
 {
     public class Assinatura : IAssinatura
     {

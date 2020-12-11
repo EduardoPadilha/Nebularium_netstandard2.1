@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Nebularium.Weaver.RabbitMQ
+namespace Nebularium.Weaver
 {
     public class GerenciadorAssinatura : IGerenciadorAssinatura
     {
@@ -23,14 +23,14 @@ namespace Nebularium.Weaver.RabbitMQ
             var eventoTipo = typeof(TEvento);
             if (!TemAssinaturaParaEvento<TEvento>())
             {
-                QuandoEventoAdicionado?.Invoke(this, eventoTipo.FullName);
-                _manipuladores.Add(eventoTipo.FullName, new List<IAssinatura>());
+                QuandoEventoAdicionado?.Invoke(this, eventoTipo.Name);
+                _manipuladores.Add(eventoTipo.Name, new List<IAssinatura>());
             }
 
-            if (_manipuladores[eventoTipo.FullName].Any(s => s.TipoManipulador == manipuladorTipo))
+            if (_manipuladores[eventoTipo.Name].Any(s => s.TipoManipulador == manipuladorTipo))
                 throw new ArgumentException($"Manipulador do tipo {manipuladorTipo.Name} já registrado para '{eventoTipo.Name}'", manipuladorTipo.Name);
 
-            _manipuladores[eventoTipo.FullName].Add(Assinatura.New(eventoTipo, manipuladorTipo));
+            _manipuladores[eventoTipo.Name].Add(Assinatura.New(eventoTipo, manipuladorTipo));
         }
 
         public void RemoverAssinatura<TEvento, TEventoManipulador>()
@@ -48,7 +48,7 @@ namespace Nebularium.Weaver.RabbitMQ
             if (!TemAssinaturaParaEvento<TEvento>())
                 return null;
 
-            return _manipuladores[typeof(TEvento).FullName].SingleOrDefault(s => s.TipoManipulador == typeof(TEventoManipulador));
+            return _manipuladores[typeof(TEvento).Name].SingleOrDefault(s => s.TipoManipulador == typeof(TEventoManipulador));
         }
         private void RemoverAssinatura<TEvento>(IAssinatura assinaturaParaRemover) where TEvento : IEvento
         {
@@ -56,17 +56,17 @@ namespace Nebularium.Weaver.RabbitMQ
 
             if (assinaturaParaRemover == null) return;
 
-            _manipuladores[tipoEvento.FullName].Remove(assinaturaParaRemover);
+            _manipuladores[tipoEvento.Name].Remove(assinaturaParaRemover);
 
-            if (_manipuladores[tipoEvento.FullName].Any()) return;
+            if (_manipuladores[tipoEvento.Name].Any()) return;
 
-            _manipuladores.Remove(tipoEvento.FullName);
-            QuandoEventoRemovido?.Invoke(this, tipoEvento.FullName);
+            _manipuladores.Remove(tipoEvento.Name);
+            QuandoEventoRemovido?.Invoke(this, tipoEvento.Name);
         }
 
-        public bool TemAssinaturaParaEvento<TEvento>() => !EstaVazio && _manipuladores.ContainsKey(typeof(TEvento).FullName);
+        public bool TemAssinaturaParaEvento<TEvento>() => !EstaVazio && _manipuladores.ContainsKey(typeof(TEvento).Name);
         public bool TemAssinaturaParaEvento(string tipoEvento) => !EstaVazio && _manipuladores.ContainsKey(tipoEvento);
-        public IEnumerable<IAssinatura> ObterManipuladores<TEvento>() => _manipuladores[typeof(TEvento).FullName];
+        public IEnumerable<IAssinatura> ObterManipuladores<TEvento>() => _manipuladores[typeof(TEvento).Name];
         public IEnumerable<IAssinatura> ObterManipuladores(string tipoEvento) => _manipuladores[tipoEvento];
     }
 }

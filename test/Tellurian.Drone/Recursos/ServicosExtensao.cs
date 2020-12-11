@@ -14,6 +14,7 @@ using Nebularium.Tellurian.Drone.Servicos;
 using Nebularium.Tellurian.Mock;
 using Nebularium.Tellurian.Recursos;
 using Nebularium.Tiamat.Interfaces;
+using Nebularium.Weaver;
 using Nebularium.Weaver.Interfaces;
 using Nebularium.Weaver.RabbitMQ;
 using Nebularium.Weaver.RabbitMQ.Interfaces;

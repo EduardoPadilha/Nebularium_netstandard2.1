@@ -80,6 +80,7 @@ namespace Nebularium.Weaver.RabbitMQ
             where TEventoManipulado : IEventoManipulador<TEvento>
         {
             _gerenciadorAssinatura.AddAssinatura<TEvento, TEventoManipulado>();
+            IniciarCanalConsumidor();
         }
         public void CancelarAssinatura<TEvento, TEventoManipulado>()
             where TEvento : IEvento
@@ -117,6 +118,8 @@ namespace Nebularium.Weaver.RabbitMQ
             if (!_conexao.EstaConectado)
                 _conexao.TentaConectar();
 
+            _logger.LogTrace("Criando canal consumidor RabbitMQ");
+
             var canal = _conexao.CriaModelo();
             canal.ExchangeDeclare(BROKER_NAME, ExchangeType.Direct);
             canal.QueueDeclare(_filaNome, durable: true,
@@ -124,33 +127,45 @@ namespace Nebularium.Weaver.RabbitMQ
                                  autoDelete: false,
                                  arguments: null);
 
-            var consumidor = new AsyncEventingBasicConsumer(canal);
-            consumidor.Received += async (model, ea) =>
-            {
-                var eventoNome = ea.RoutingKey;
-                var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                try
-                {
-                    await ManipularEvento(eventoNome, message);
-                    canal.BasicAck(ea.DeliveryTag, false);
-                }
-                catch (Exception)
-                {
-                    canal.BasicNack(ea.DeliveryTag, false, false);
-                }
-            };
-
-            canal.BasicConsume(_filaNome, false, consumidor);
-
             canal.CallbackException += (sender, ea) =>
             {
+                _logger.LogWarning(ea.Exception, "Recriando canal consumidor");
+
                 _canalConsumidor.Dispose();
                 _canalConsumidor = CriaCanalConsumidor();
+
+                IniciarCanalConsumidor();
             };
 
             return canal;
         }
-        private async Task ManipularEvento(string tipoEvento, string mensagem)
+        private void IniciarCanalConsumidor()
+        {
+            _logger.LogTrace("Starting RabbitMQ basic consume");
+            if (_canalConsumidor == null)
+            {
+                _logger.LogError("IniciarCanalConsumidor não pode chamar no _canalConsumidor == null");
+                return;
+            }
+            var consumidor = new AsyncEventingBasicConsumer(_canalConsumidor);
+            consumidor.Received += async (model, ea) =>
+            {
+                var eventoNome = ea.RoutingKey;
+                var mensagem = Encoding.UTF8.GetString(ea.Body.ToArray());
+                try
+                {
+                    await ProcessarEvento(eventoNome, mensagem);
+                    _canalConsumidor.BasicAck(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, $"----- ERRO processando mensagem \"{mensagem}\"");
+                }
+            };
+
+            _canalConsumidor.BasicConsume(_filaNome, false, consumidor);
+        }
+        private async Task ProcessarEvento(string tipoEvento, string mensagem)
         {
             if (!_gerenciadorAssinatura.TemAssinaturaParaEvento(tipoEvento))
                 return;
