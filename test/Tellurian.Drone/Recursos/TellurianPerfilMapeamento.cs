@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Nebularium.Tellurian.Mock;
+using Nebularium.Tellurian.Drone.Behemoth.Mapeamentos;
+using Nebularium.Tellurian.Drone.Entidades;
 
 namespace Nebularium.Tellurian.Recursos
 {
@@ -9,7 +10,7 @@ namespace Nebularium.Tellurian.Recursos
         public TellurianPerfilMapeamento()
         {
             CreateMap<Pessoa, Pessoa>().ReverseMap();
-            CreateMap<Pessoa, PessoaMProxy>().ReverseMap();
+            CreateMap<Pessoa, PessoaMapeamento>().ReverseMap();
         }
     }
 }

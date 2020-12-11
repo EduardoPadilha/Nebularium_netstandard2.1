@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Nebularium.Tellurian.Mock
+namespace Nebularium.Tellurian.Drone.Entidades
 {
     public class Pessoa : Entidade
     {
@@ -15,6 +15,12 @@ namespace Nebularium.Tellurian.Mock
         public List<Endereco> Enderecos { get; set; }
         [DisplayName]
         public DateTime Nascimento { get; set; }
+        public Metadado Metadado { get; set; }
+
+        public override string ToString()
+        {
+            return $"{NomeSobrenome} - {Genero} - {Nascimento:dd/MM/yy}";
+        }
 
         public static List<Pessoa> Pessoas = new List<Pessoa>
         {
