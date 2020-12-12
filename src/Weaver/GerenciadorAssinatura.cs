@@ -15,11 +15,11 @@ namespace Nebularium.Weaver
         public event EventHandler<string> QuandoEventoAdicionado;
 
 
-        public void AddAssinatura<TEvento, TEventoManipulador>()
+        public void AddAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>
+            where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
-            var manipuladorTipo = typeof(TEventoManipulador);
+            var manipuladorTipo = typeof(TManipuladoEvento);
             var eventoTipo = typeof(TEvento);
             if (!TemAssinaturaParaEvento<TEvento>())
             {
@@ -33,22 +33,22 @@ namespace Nebularium.Weaver
             _manipuladores[eventoTipo.Name].Add(Assinatura.New(eventoTipo, manipuladorTipo));
         }
 
-        public void RemoverAssinatura<TEvento, TEventoManipulador>()
+        public void RemoverAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>
+            where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
 
-            var manipuladorParaRemover = ObterAssinaturaParaRemover<TEvento, TEventoManipulador>();
+            var manipuladorParaRemover = ObterAssinaturaParaRemover<TEvento, TManipuladoEvento>();
             RemoverAssinatura<TEvento>(manipuladorParaRemover);
         }
-        private IAssinatura ObterAssinaturaParaRemover<TEvento, TEventoManipulador>()
+        private IAssinatura ObterAssinaturaParaRemover<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>
+            where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
             if (!TemAssinaturaParaEvento<TEvento>())
                 return null;
 
-            return _manipuladores[typeof(TEvento).Name].SingleOrDefault(s => s.TipoManipulador == typeof(TEventoManipulador));
+            return _manipuladores[typeof(TEvento).Name].SingleOrDefault(s => s.TipoManipulador == typeof(TManipuladoEvento));
         }
         private void RemoverAssinatura<TEvento>(IAssinatura assinaturaParaRemover) where TEvento : IEvento
         {

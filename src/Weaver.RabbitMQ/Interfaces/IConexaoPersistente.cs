@@ -2,7 +2,7 @@
 
 namespace Nebularium.Weaver.RabbitMQ.Interfaces
 {
-    public interface IConexaoPersistenteRabbitMQ
+    public interface IConexaoPersistente
     {
         bool EstaConectado { get; }
         bool TentaConectar();

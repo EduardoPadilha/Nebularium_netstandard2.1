@@ -31,10 +31,12 @@ namespace Nebularium.Tellurian.Drone.Recursos
                 .AddServicos()
                 .AddDbContexto(configuracao)
                 .AddIntegrationServices(configuracao)
-                .AddBarramentoEventos(configuracao)
-                .AddTransient<CadastrarPessoaManipulador>();
+                .AddBarramentoEventos(configuracao);
+            //.AddTransient<CadastrarPessoaManipulador>();
 
-            Container = Servicos.BuildServiceProvider();
+
+
+            Container = Servicos.BuildServiceProvider();//(new ServiceProviderOptions { ValidateOnBuild = true });
         }
 
 

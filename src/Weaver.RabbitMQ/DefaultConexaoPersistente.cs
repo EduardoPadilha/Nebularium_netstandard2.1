@@ -9,18 +9,18 @@ using System.Net.Sockets;
 
 namespace Nebularium.Weaver.RabbitMQ
 {
-    public class DefaultConexaoPersistenteRabbitMQ : IConexaoPersistenteRabbitMQ, IDisposable
+    public class DefaultConexaoPersistente : IConexaoPersistente, IDisposable
     {
 
         private readonly IConnectionFactory _fabrica;
-        private readonly ILogger<DefaultConexaoPersistenteRabbitMQ> _logger;
+        private readonly ILogger<DefaultConexaoPersistente> _logger;
         private readonly int _tentativasReconexao;
         private IConnection _conexao;
         bool _disposed;
 
         object _sync_root = new object();
 
-        public DefaultConexaoPersistenteRabbitMQ(IConnectionFactory factory, ILogger<DefaultConexaoPersistenteRabbitMQ> logger, int tentativasReconexao = 5)
+        public DefaultConexaoPersistente(IConnectionFactory factory, ILogger<DefaultConexaoPersistente> logger, int tentativasReconexao = 5)
         {
             _fabrica = factory;
             _logger = logger;

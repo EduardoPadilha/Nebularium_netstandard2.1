@@ -33,7 +33,7 @@ namespace Publicador
         public Program()
         {
             NebulariumFabrica.Inicializar();
-            var fabrica = (NebulariumFabrica)NebulariumFabrica.Instancia;
+            //var fabrica = (NebulariumFabrica)NebulariumFabrica.Instancia;
             //fabrica.ConfiguracaoesAdicionais(ServicosExtensao.ConfigurarBarramentoEvento);
             barramento = GestorDependencia.Instancia.ObterInstancia<IBarramentoEvento>();
         }
