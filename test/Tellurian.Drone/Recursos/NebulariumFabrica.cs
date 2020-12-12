@@ -34,7 +34,9 @@ namespace Nebularium.Tellurian.Drone.Recursos
                 .AddBarramentoEventos(configuracao)
                 .AddTransient<CadastrarPessoaManipulador>();
 
-            Container = Servicos.BuildServiceProvider();
+
+
+            Container = Servicos.BuildServiceProvider();//(new ServiceProviderOptions { ValidateOnBuild = true });
         }
 
 

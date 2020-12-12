@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Nebularium.Weaver.Exceccoes;
 using Nebularium.Weaver.Interfaces;
 using Nebularium.Weaver.RabbitMQ.Interfaces;
 using Newtonsoft.Json;
@@ -16,14 +17,14 @@ namespace Nebularium.Weaver.RabbitMQ
     public class BarramentoEvento : IBarramentoEvento
     {
         const string BROKER_NAME = "noctua_event_bus";
-        private readonly IConexaoPersistenteRabbitMQ _conexao;
+        private readonly IConexaoPersistente _conexao;
         private readonly ILogger _logger;
         private readonly IGerenciadorAssinatura _gerenciadorAssinatura;
         private readonly int _retryCount;
         private string _filaNome;
         private IModel _canalConsumidor;
         //private readonly string _exchangeName;
-        public BarramentoEvento(IConexaoPersistenteRabbitMQ connection, ILogger logger,
+        public BarramentoEvento(IConexaoPersistente connection, ILogger logger,
             IGerenciadorAssinatura gerenciadorAssinatura, string filaNome = null, int retryCount = 5)
         {
 
@@ -75,18 +76,18 @@ namespace Nebularium.Weaver.RabbitMQ
                 });
             }
         }
-        public void Assinar<TEvento, TEventoManipulado>()
+        public void Assinar<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
-            where TEventoManipulado : IEventoManipulador<TEvento>
+            where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
-            _gerenciadorAssinatura.AddAssinatura<TEvento, TEventoManipulado>();
+            _gerenciadorAssinatura.AddAssinatura<TEvento, TManipuladoEvento>();
             IniciarCanalConsumidor();
         }
-        public void CancelarAssinatura<TEvento, TEventoManipulado>()
+        public void CancelarAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
-            where TEventoManipulado : IEventoManipulador<TEvento>
+            where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
-            _gerenciadorAssinatura.RemoverAssinatura<TEvento, TEventoManipulado>();
+            _gerenciadorAssinatura.RemoverAssinatura<TEvento, TManipuladoEvento>();
         }
         #region Suportes
 
@@ -157,9 +158,14 @@ namespace Nebularium.Weaver.RabbitMQ
                     await ProcessarEvento(eventoNome, mensagem);
                     _canalConsumidor.BasicAck(ea.DeliveryTag, false);
                 }
-                catch (Exception ex)
+                catch (SemManipuladorException ex)
                 {
                     _logger.LogWarning(ex, $"----- ERRO processando mensagem \"{mensagem}\"");
+                    _canalConsumidor.BasicNack(ea.DeliveryTag, true, false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"----- ERRO processando mensagem \"{mensagem}\"");
                 }
             };
 

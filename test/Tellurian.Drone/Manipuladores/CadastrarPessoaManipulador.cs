@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Tellurian.Drone.Manipuladores
 {
-    public class CadastrarPessoaManipulador : IEventoManipulador<CadastrarPessoaComandoEvento>
+    public class CadastrarPessoaManipulador : IManipuladorEvento<CadastrarPessoaComandoEvento>
     {
         private readonly IComandoServico<Pessoa> pessoaComandoServico;
         private readonly ILogger<Pessoa> logger;

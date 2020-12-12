@@ -12,12 +12,12 @@ namespace Nebularium.Weaver.Interfaces
 
         void AddAssinatura<TEvento, TEventoManipulador>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>;
+            where TEventoManipulador : IManipuladorEvento<TEvento>;
         IEnumerable<IAssinatura> ObterManipuladores(string tipoEvento);
         IEnumerable<IAssinatura> ObterManipuladores<TEvento>();
         void RemoverAssinatura<TEvento, TEventoManipulador>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>;
+            where TEventoManipulador : IManipuladorEvento<TEvento>;
         bool TemAssinaturaParaEvento(string tipoEvento);
         bool TemAssinaturaParaEvento<TEvento>();
     }

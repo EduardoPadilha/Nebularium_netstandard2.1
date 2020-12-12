@@ -2,7 +2,7 @@
 
 namespace Nebularium.Weaver.Interfaces
 {
-    public interface IEventoManipulador<TEvento> where TEvento : IEvento
+    public interface IManipuladorEvento<TEvento> where TEvento : IEvento
     {
         Task Resolver(TEvento evento);
     }

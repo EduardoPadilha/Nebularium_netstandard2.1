@@ -1,4 +1,5 @@
 ﻿using Nebularium.Tarrasque.Gestores;
+using Nebularium.Weaver.Exceccoes;
 using Nebularium.Weaver.Interfaces;
 using Newtonsoft.Json;
 using System;
@@ -21,8 +22,10 @@ namespace Nebularium.Weaver
         {
             var dadosEvento = JsonConvert.DeserializeObject(mensagem, TipoEvento);
             var manipulador = GestorDependencia.Instancia.ObterInstancia(TipoManipulador);
-            var tipoConcreto = typeof(IEventoManipulador<>).MakeGenericType(TipoEvento);
-            var nomeMetodo = nameof(IEventoManipulador<IEvento>.Resolver);
+            if (manipulador == null)
+                throw new SemManipuladorException(TipoManipulador);
+            var tipoConcreto = typeof(IManipuladorEvento<>).MakeGenericType(TipoEvento);
+            var nomeMetodo = nameof(IManipuladorEvento<IEvento>.Resolver);
             await (Task)tipoConcreto.GetMethod(nomeMetodo).Invoke(manipulador, new[] { dadosEvento });
         }
 

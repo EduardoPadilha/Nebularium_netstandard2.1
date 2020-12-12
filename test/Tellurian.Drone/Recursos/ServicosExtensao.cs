@@ -86,9 +86,9 @@ namespace Nebularium.Tellurian.Drone.Recursos
         public static IServiceCollection AddIntegrationServices(this IServiceCollection servicos, IConfiguration configuracao)
         {
 
-            servicos.AddSingleton<IConexaoPersistenteRabbitMQ>(sp =>
+            servicos.AddSingleton<IConexaoPersistente>(sp =>
             {
-                var logger = sp.GetRequiredService<ILogger<DefaultConexaoPersistenteRabbitMQ>>();
+                var logger = sp.GetRequiredService<ILogger<DefaultConexaoPersistente>>();
 
                 var factory = new ConnectionFactory()
                 {
@@ -101,7 +101,7 @@ namespace Nebularium.Tellurian.Drone.Recursos
                 if (!string.IsNullOrEmpty(configuracao["EventBusRetryCount"]))
                     retryCount = int.Parse(configuracao["EventBusRetryCount"]);
 
-                return new DefaultConexaoPersistenteRabbitMQ(factory, logger, retryCount);
+                return new DefaultConexaoPersistente(factory, logger, retryCount);
             });
 
             return servicos;
@@ -113,7 +113,7 @@ namespace Nebularium.Tellurian.Drone.Recursos
 
             servicos.AddSingleton<IBarramentoEvento, BarramentoEvento>(sp =>
             {
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IConexaoPersistenteRabbitMQ>();
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IConexaoPersistente>();
                 var logger = sp.GetRequiredService<ILogger<BarramentoEvento>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IGerenciadorAssinatura>();
 

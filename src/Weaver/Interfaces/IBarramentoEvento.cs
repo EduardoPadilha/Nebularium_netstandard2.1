@@ -6,10 +6,10 @@
 
         void Assinar<TEvento, TEventoManipulador>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>;
+            where TEventoManipulador : IManipuladorEvento<TEvento>;
 
         void CancelarAssinatura<TEvento, TEventoManipulador>()
             where TEvento : IEvento
-            where TEventoManipulador : IEventoManipulador<TEvento>;
+            where TEventoManipulador : IManipuladorEvento<TEvento>;
     }
 }
