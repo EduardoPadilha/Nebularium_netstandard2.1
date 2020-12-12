@@ -53,7 +53,7 @@ Task("Push-Nuget-Package")
     {
         DotNetCoreNuGetPush(package.FullPath, 
             new DotNetCoreNuGetPushSettings {
-                Source = "http://192.168.0.102:5555/v3/index.json",//https://www.nuget.org/api/v2/package
+                Source = "http://192.168.0.100:5555/v3/index.json",//https://www.nuget.org/api/v2/package
                 ApiKey = apiKey,
                 SkipDuplicate = true
             });
