@@ -15,7 +15,7 @@ namespace Nebularium.Weaver
         public event EventHandler<string> QuandoEventoAdicionado;
 
 
-        public void AddAssinatura<TEvento, TManipuladoEvento>()
+        public virtual void AddAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
             where TManipuladoEvento : IManipuladorEvento<TEvento>
         {
@@ -33,7 +33,7 @@ namespace Nebularium.Weaver
             _manipuladores[eventoTipo.Name].Add(Assinatura.New(eventoTipo, manipuladorTipo));
         }
 
-        public void RemoverAssinatura<TEvento, TManipuladoEvento>()
+        public virtual void RemoverAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
             where TManipuladoEvento : IManipuladorEvento<TEvento>
         {

@@ -11,17 +11,17 @@ namespace Nebularium.Tiamat.Servicos
         {
             this.repositorioComando = repositorioComando;
         }
-        public Task AdicionarAsync(TEntidade entidade)
+        public virtual Task AdicionarAsync(TEntidade entidade)
         {
             return repositorioComando.AdicionarAsync(entidade);
         }
 
-        public Task AtualizarAsync(TEntidade entidade)
+        public virtual Task AtualizarAsync(TEntidade entidade)
         {
             return repositorioComando.AtualizarAsync(entidade);
         }
 
-        public Task RemoverAsync(TEntidade entidade)
+        public virtual Task RemoverAsync(TEntidade entidade)
         {
             return repositorioComando.RemoverAsync(entidade);
         }

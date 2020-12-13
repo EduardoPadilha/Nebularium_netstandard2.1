@@ -22,34 +22,34 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         }
 
         #region Implementação IConsultaRepositorio
-        public Task<TEntidade> ObterAsync(string id)
+        public virtual Task<TEntidade> ObterAsync(string id)
         {
             var resultado = ObterTodos().FirstOrDefaultAsync(c => c.Id == id);
             return resultado.ComoAsync<TProxy, TEntidade>();
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync(IFiltro<TEntidade> filtro)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(IFiltro<TEntidade> filtro)
         {
             return ObterTodosAsync<TEntidade>(filtro);
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro)
         {
             var resultado = ObterTodos(filtro);
             return resultado.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<TEntidade, bool>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<TEntidade, bool>> predicado)
         {
             return ObterTodosAsync<TEntidade>(predicado);
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado)
         {
             var resultado = ObterTodos().Where(ConvertePredicado(predicado));
             return resultado.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado)
         {
             return ObterTodosAsync<TEntidade>(predicado);
         }
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
         {
             var predicadoConvertido = ConvertePredicado(predicado);
             var query = (IMongoQueryable<TProxy>)predicadoConvertido.Compile()(ObterTodos());
@@ -58,11 +58,11 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         #endregion
 
         #region Implementação de suporte pro repositório
-        protected IMongoQueryable<TProxy> ObterTodos<T>(IFiltro<T> filtro)
+        protected virtual IMongoQueryable<TProxy> ObterTodos<T>(IFiltro<T> filtro)
         {
             return ObterTodos().Where(ConvertePredicado(filtro.ObterPredicados()));
         }
-        protected IMongoQueryable<TProxy> ObterTodos()
+        protected virtual IMongoQueryable<TProxy> ObterTodos()
         {
             return context.ObterColecao<TProxy>().AsQueryable();
         }

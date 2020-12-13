@@ -32,7 +32,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                 throw new Exception("Não foi possível se conectar com o servidor de banco.", ex);
             }
         }
-        public IMongoCollection<T> ObterColecao<T>()
+        public virtual IMongoCollection<T> ObterColecao<T>()
         {
             var nome = typeof(T).ObterAnotacao<NomeColecaoAttribute>()?.Nome;
             return _database.GetCollection<T>(nome.LimpoNuloBranco() ? nameof(T) : nome);

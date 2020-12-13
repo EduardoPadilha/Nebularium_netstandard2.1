@@ -6,7 +6,7 @@
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Tiamat</Product>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <Description>Biblioteca contendo inteligência central e orquestração para as demais bibliotecas Nebularium.</Description>
   </PropertyGroup>
 

@@ -4,7 +4,7 @@ using Nebularium.Tiamat.Interfaces;
 
 namespace Nebularium.Behemoth.Mongo.Mapeamento
 {
-    public class EntidadeMapeamento : IEntidade
+    public abstract class EntidadeMapeamento : IEntidade
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
