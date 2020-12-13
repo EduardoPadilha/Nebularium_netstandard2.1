@@ -45,7 +45,7 @@ namespace Nebularium.Weaver.RabbitMQ
             _canalConsumidor = CriaCanalConsumidor();
         }
 
-        public void Publicar(IEvento evento)
+        public virtual void Publicar(IEvento evento)
         {
             if (!_conexao.EstaConectado)
                 _conexao.TentaConectar();
@@ -83,7 +83,7 @@ namespace Nebularium.Weaver.RabbitMQ
             _gerenciadorAssinatura.AddAssinatura<TEvento, TManipuladoEvento>();
             IniciarCanalConsumidor();
         }
-        public void CancelarAssinatura<TEvento, TManipuladoEvento>()
+        public virtual void CancelarAssinatura<TEvento, TManipuladoEvento>()
             where TEvento : IEvento
             where TManipuladoEvento : IManipuladorEvento<TEvento>
         {

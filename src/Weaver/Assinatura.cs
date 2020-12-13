@@ -18,7 +18,7 @@ namespace Nebularium.Weaver
             TipoEvento = tipoEvento;
         }
 
-        public async Task Resolver(string mensagem)
+        public virtual async Task Resolver(string mensagem)
         {
             var dadosEvento = JsonConvert.DeserializeObject(mensagem, TipoEvento);
             var manipulador = GestorDependencia.Instancia.ObterInstancia(TipoManipulador);

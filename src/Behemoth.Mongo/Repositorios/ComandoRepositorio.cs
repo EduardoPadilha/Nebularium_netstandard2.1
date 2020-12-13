@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public class ComandoRepositorio<TEntidade, TProxy> : IComandoRepositorio<TEntidade>
+    public abstract class ComandoRepositorio<TEntidade, TProxy> : IComandoRepositorio<TEntidade>
         where TEntidade : IEntidade, new()
         where TProxy : IEntidade, new()
     {
@@ -22,7 +22,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             this.logger = logger;
         }
 
-        public Task AdicionarAsync(TEntidade entidade)
+        public virtual Task AdicionarAsync(TEntidade entidade)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             }
         }
 
-        public Task AdicionarAsync(IEnumerable<TEntidade> entidades)
+        public virtual Task AdicionarAsync(IEnumerable<TEntidade> entidades)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             }
         }
 
-        public Task AtualizarAsync(TEntidade entidade)
+        public virtual Task AtualizarAsync(TEntidade entidade)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         //         .ContinueWith(e => entidades.Injete(proxys));
         //}
 
-        public Task RemoverAsync(TEntidade entidade)
+        public virtual Task RemoverAsync(TEntidade entidade)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             }
         }
 
-        public Task RemoverAsync(IEnumerable<TEntidade> entidades)
+        public virtual Task RemoverAsync(IEnumerable<TEntidade> entidades)
         {
             try
             {

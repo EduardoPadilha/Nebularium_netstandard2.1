@@ -15,22 +15,22 @@ namespace Nebularium.Tiamat.Servicos
         {
             this.repositorioConsulta = repositorioConsulta;
         }
-        public Task<TEntidade> ObterAsync(string id)
+        public virtual Task<TEntidade> ObterAsync(string id)
         {
             return repositorioConsulta.ObterAsync(id);
         }
 
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro)
         {
             return repositorioConsulta.ObterTodosAsync(filtro);
         }
 
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado)
         {
             return repositorioConsulta.ObterTodosAsync(predicado);
         }
 
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
         {
             return repositorioConsulta.ObterTodosAsync(predicado);
         }

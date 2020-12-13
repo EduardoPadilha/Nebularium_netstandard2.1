@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Nebularium.Tiamat.Filtros
 {
-    public class FiltroAbstrato<TEntidade> : IFiltro<TEntidade> where TEntidade : IEntidade, new()
+    public abstract class FiltroAbstrato<TEntidade> : IFiltro<TEntidade> where TEntidade : IEntidade, new()
     {
         private readonly Dictionary<string, Expression<Func<TEntidade, bool>>> criterios;
         private readonly Dictionary<string, Expression<Func<TEntidade, bool>>> condicoes;
@@ -18,18 +18,18 @@ namespace Nebularium.Tiamat.Filtros
             criterios = new Dictionary<string, Expression<Func<TEntidade, bool>>>();
             condicoes = new Dictionary<string, Expression<Func<TEntidade, bool>>>();
         }
-        public IFiltroOpcoes<TEntidade> AdicionarRegra(Expression<Func<TEntidade, bool>> criterio)
+        public virtual IFiltroOpcoes<TEntidade> AdicionarRegra(Expression<Func<TEntidade, bool>> criterio)
         {
             var id = Guid.NewGuid().ToString("N");
             var r = new FiltroOpcoes<TEntidade>(id, condicoes);
             criterios.Add(id, criterio);
             return r;
         }
-        public void SetarModeloCriterio(TEntidade criterio)
+        public virtual void SetarModeloCriterio(TEntidade criterio)
         {
             Criterio = criterio;
         }
-        public IQueryable<TEntidade> ObterFiltro(IQueryable<TEntidade> lista)
+        public virtual IQueryable<TEntidade> ObterFiltro(IQueryable<TEntidade> lista)
         {
             foreach (var k in criterios.Keys)
             {
@@ -43,7 +43,7 @@ namespace Nebularium.Tiamat.Filtros
             }
             return lista;
         }
-        public Expression<Func<TEntidade, bool>> ObterPredicados()
+        public virtual Expression<Func<TEntidade, bool>> ObterPredicados()
         {
             Expression<Func<TEntidade, bool>> ExpressoesAtivas = exp => true;
             foreach (var k in criterios.Keys)
