@@ -1,4 +1,4 @@
-﻿using Nebularium.Tiamat.Interfaces;
+﻿using Nebularium.Tiamat.Abstracoes;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

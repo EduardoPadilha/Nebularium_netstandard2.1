@@ -2,7 +2,6 @@
 using Nebularium.Tarrasque.Funcoes;
 using Nebularium.Tarrasque.Gestores;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -37,19 +36,6 @@ namespace Nebularium.Tarrasque.Extensoes
             if (type != propInfo.PropertyType && !type.GetTypeInfo().IsSubclassOf(propInfo.PropertyType))
                 throw new ArgumentException(String.Format("Expressão '{0}' se refere a uma propriedade que não é do tipo {1}.", propertyLambda, type));
             return propInfo;
-        }
-        /// <summary>
-        /// Obtém os displays configurados nos resources ou utiliza o padrão caso não tenha.
-        /// Importante!! Enterprise.Eureka.Configuracao.DisplayNameExtrator precisa estar setado para funcionar.
-        /// </summary>
-        /// <typeparam name="TModel">Tipo que contém a propriedade</typeparam>
-        /// <typeparam name="TResult">Tipo da propriedade a se obter o display</typeparam>
-        /// <param name="obj">Instância do tipo a se obter a propriedade</param>
-        /// <param name="prop">Propriedade a se obter o display</param>
-        /// <returns>Uma string formatada ou obtida dos resouces do projeto</returns>
-        public static bool NuloOuDefault<T>(this T obj)
-        {
-            return obj == null || EqualityComparer<T>.Default.Equals(obj, default(T));
         }
         public static Type ObterTypeSemProxy(this object tipo)
         {

@@ -1,6 +1,6 @@
-﻿using Nebularium.Tarrasque.Configuracoes;
+﻿using Nebularium.Tarrasque.Abstracoes;
+using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Gestores;
-using Nebularium.Tarrasque.Interfaces;
 using Nebularium.Tellurian.Recursos;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,7 +17,7 @@ namespace Nebularium.Tellurian.Tarrasque
         [Fact]
         public void GestorConfiguracao_test()
         {
-            var dbConfig = gestorConfiguracao.ObterConfiguracao<DBConfig>();
+            var dbConfig = gestorConfiguracao.ObterConfiguracao<DBConfiguracaoPadrao>();
             Assert.NotNull(dbConfig);
             Assert.Equal("mongodb://localhost:27017", dbConfig.ConnectionString);
             Assert.Equal("ErpPdv", dbConfig.DatabaseName);

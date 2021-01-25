@@ -1,8 +1,10 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using Nebularium.Behemoth.Mongo.Contextos;
+using Nebularium.Behemoth.Mongo.Abstracoes;
+using Nebularium.Behemoth.Mongo.Mapeamento;
 using Nebularium.Tarrasque.Extensoes;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
+using Nebularium.Tiamat.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,70 +13,66 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ConsultaRepositorio<TEntidade, TProxy> : IConsultaRepositorio<TEntidade>
-        where TEntidade : IEntidade, new()
-        where TProxy : IEntidade, new()
+    public abstract class ConsultaRepositorio<TEntidade, TProxy> : ConsultaRepositorioBase<TEntidade, TProxy>,
+        IConsultaRepositorio<TEntidade>
+         where TEntidade : Entidade, new()
+        where TProxy : EntidadeMapeamento, new()
     {
-        protected IMongoContext context { get; }
-        public ConsultaRepositorio(IMongoContext context)
+        protected ConsultaRepositorio(IMongoContexto contexto) : base(contexto)
         {
-            this.context = context;
+        }
+
+        public override IOrderedMongoQueryable<TProxy> OrdernarPadrao(IMongoQueryable<TProxy> query)
+        {
+            return query.OrderBy(c => c.Metadado.DataCriacao);
+        }
+        protected override IMongoQueryable<TProxy> ObterTodos()
+        {
+            return OrdernarPadrao(colecao.AsQueryable().Where(c => !c.Metadado.DataDelecao.HasValue));
+        }
+        protected virtual IMongoQueryable<TProxy> ObterTodosAtivos()
+        {
+            return ObterTodos().Where(c => c.Metadado.Ativo);
+        }
+        protected virtual IMongoQueryable<TProxy> ObterTodosAtivos<T>(IFiltro<T> filtro)
+        {
+            return ObterTodosAtivos().Where(filtro.ObterPredicados().ConvertePredicado<T, TProxy>());
         }
 
         #region Implementação IConsultaRepositorio
-        public virtual Task<TEntidade> ObterAsync(string id)
+        public virtual Task<TEntidade> ObterAtivoAsync(string id)
         {
-            var resultado = ObterTodos().FirstOrDefaultAsync(c => c.Id == id);
+            var resultado = ObterTodosAtivos().FirstOrDefaultAsync(c => c.Id == id);
             return resultado.ComoAsync<TProxy, TEntidade>();
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(IFiltro<TEntidade> filtro)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync(IFiltro<TEntidade> filtro, IPaginador paginador = null)
         {
-            return ObterTodosAsync<TEntidade>(filtro);
+            return ObterTodosAtivosAsync<TEntidade>(filtro, paginador);
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync<T>(IFiltro<T> filtro, IPaginador paginador = null)
         {
-            var resultado = ObterTodos(filtro);
-            return resultado.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();
+            var query = ObterTodosAtivos(filtro);
+            return ProcessarBuscas(query, paginador);
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<TEntidade, bool>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync(Expression<Func<TEntidade, bool>> predicado, IPaginador paginador = null)
         {
-            return ObterTodosAsync<TEntidade>(predicado);
+            return ObterTodosAtivosAsync<TEntidade>(predicado, paginador);
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync<T>(Expression<Func<T, bool>> predicado, IPaginador paginador = null)
         {
-            var resultado = ObterTodos().Where(ConvertePredicado(predicado));
-            return resultado.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();
+            var query = ObterTodosAtivos().Where(predicado.ConvertePredicado<T, TProxy>());
+            return ProcessarBuscas(query, paginador);
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAtivosAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado, IPaginador paginador = null)
         {
-            return ObterTodosAsync<TEntidade>(predicado);
+            return ObterTodosQueryableAtivosAsync<TEntidade>(predicado, paginador);
         }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAtivosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado, IPaginador paginador = null)
         {
-            var predicadoConvertido = ConvertePredicado(predicado);
-            var query = (IMongoQueryable<TProxy>)predicadoConvertido.Compile()(ObterTodos());
-            return query.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();
+            var predicadoConvertido = predicado.ConvertePredicado<T, TProxy>();
+            var query = (IMongoQueryable<TProxy>)predicadoConvertido.Compile()(ObterTodosAtivos());
+            return ProcessarBuscas(query, paginador);
         }
-        #endregion
-
-        #region Implementação de suporte pro repositório
-        protected virtual IMongoQueryable<TProxy> ObterTodos<T>(IFiltro<T> filtro)
-        {
-            return ObterTodos().Where(ConvertePredicado(filtro.ObterPredicados()));
-        }
-        protected virtual IMongoQueryable<TProxy> ObterTodos()
-        {
-            return context.ObterColecao<TProxy>().AsQueryable();
-        }
-        private Expression<Func<TProxy, bool>> ConvertePredicado<T>(Expression<Func<T, bool>> predicado)
-        {
-            return predicado.Como<Expression<Func<TProxy, bool>>>();
-        }
-        private Expression<Func<IQueryable<TProxy>, IQueryable<TProxy>>> ConvertePredicado<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado)
-        {
-            return predicado.Como<Expression<Func<IQueryable<TProxy>, IQueryable<TProxy>>>>();
-        }
-
         #endregion
     }
 }

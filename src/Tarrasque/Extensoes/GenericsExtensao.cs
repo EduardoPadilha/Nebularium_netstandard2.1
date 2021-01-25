@@ -35,5 +35,9 @@ namespace Nebularium.Tarrasque.Extensoes
         {
             return Configuracao.DisplayNameExtrator().ObterDisplay(obj, prop.ObterNomePropriedade());
         }
+        public static bool NuloOuDefault<T>(this T? obj) where T : struct
+        {
+            return obj == null || obj.Equals(default(T));
+        }
     }
 }

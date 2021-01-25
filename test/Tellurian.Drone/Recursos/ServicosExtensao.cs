@@ -1,19 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Nebularium.Behemoth.Mongo.Contextos;
+using Nebularium.Behemoth.Mongo.Abstracoes;
+using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Configuracoes;
-using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Recursos;
 using Nebularium.Tellurian.Drone.Behemoth.Repositorios;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Drone.Eventos;
+using Nebularium.Tellurian.Drone.Features;
 using Nebularium.Tellurian.Drone.Interfaces;
 using Nebularium.Tellurian.Drone.Manipuladores;
-using Nebularium.Tellurian.Drone.Servicos;
 using Nebularium.Tellurian.Mock;
 using Nebularium.Tellurian.Recursos;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
 using Nebularium.Weaver;
 using Nebularium.Weaver.Interfaces;
 using Nebularium.Weaver.RabbitMQ;
@@ -26,26 +27,9 @@ namespace Nebularium.Tellurian.Drone.Recursos
 {
     public static class ServicosExtensao
     {
-        public static IServiceCollection AddFiltros(this IServiceCollection servicos)
+        public static IServiceCollection AddFeatures(this IServiceCollection servicos)
         {
-            //servicos.AddSingleton<IValidador<Pessoa>, PessoaValidador>();
-            //servicos.AddSingleton<IValidador<Endereco>, EnderecoValidador>();
-
-            return servicos;
-        }
-
-        public static IServiceCollection AddServicos(this IServiceCollection servicos)
-        {
-            servicos.AddSingleton<IComandoServico<Pessoa>, PessoaComandoServico>();
-            //servicos.AddSingleton<IValidador<Endereco>, EnderecoValidador>();
-
-            return servicos;
-        }
-
-        public static IServiceCollection AddValidadores(this IServiceCollection servicos)
-        {
-            servicos.AddSingleton<IValidador<Pessoa>, PessoaValidador>();
-            servicos.AddSingleton<IValidador<Endereco>, EnderecoValidador>();
+            servicos.AddScoped<ICadastrarPessoa, CadastrarPessoa>();
 
             return servicos;
         }
@@ -62,23 +46,33 @@ namespace Nebularium.Tellurian.Drone.Recursos
                                 .CreateLogger(), true);
             });
 
-            GestorAutoMapper.Inicializar();
-            servicos.AddSingleton(sp => GestorAutoMapper.Instancia.Mapper);
-
+            servicos.AddSingletonTodosPorInterface(typeof(IValidador<>), typeof(ServicoExtensao));
             servicos.AddSingleton<IGestorConfiguracao, GestorConfiguracaoPadrao>();
-
             servicos.AddSingleton<IDisplayNameExtrator>(sp => new DisplayNameExtratorPadrao());
 
             return servicos;
         }
 
-        public static IServiceCollection AddDbContexto(this IServiceCollection servicos, IConfiguration configuracao)
+        public static IServiceCollection AddRepositorios(this IServiceCollection servicos)
         {
-            servicos.AddSingleton<IDbConfigs>(sp => new DBConfig(configuracao));
-            servicos.AddSingleton<IMongoContext, TellurianContext>();
+            servicos.AddSingleton<IDbConfiguracao, DBConfiguracaoPadrao>();
+            servicos.AddSingleton<IMongoContexto, TellurianContext>();
 
-            servicos.AddTransient<IPessoaConsultaRepositorio, PessoaConsultaRepositorio>();
-            servicos.AddTransient<IComandoRepositorio<Pessoa>, PessoaComandoRepositorio>();
+            servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorioBase<>), typeof(ServicosExtensao));
+            servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorio<>), typeof(ServicosExtensao));
+            servicos.AddScopedTodosPorInterface(typeof(IConsultaRepositorio<>), typeof(ServicosExtensao));
+            servicos.AddScopedTodosPorInterface(typeof(IConsultaRepositorioBase<>), typeof(ServicosExtensao));
+
+            servicos.AddScoped<IPessoaConsultaRepositorio, PessoaConsultaRepositorio>();
+            servicos.AddScoped<IPessoaComandoRepositorio, PessoaComandoRepositorio>();
+
+            return servicos;
+        }
+
+        public static IServiceCollection AddRepositoriosAutoMapper(this IServiceCollection servicos)
+        {
+            GestorAutoMapper.Inicializar();
+            servicos.AddSingleton(sp => GestorAutoMapper.Instancia.Mapper);
 
             return servicos;
         }

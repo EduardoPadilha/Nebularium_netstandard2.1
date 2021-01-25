@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 using Xunit.Abstractions;
+using Nebularium.Tiamat.Recursos;
 
 namespace Nebularium.Tellurian.Behemoth
 {
@@ -63,9 +64,18 @@ namespace Nebularium.Tellurian.Behemoth
                                                     pessoa.Genero == Genero.Feminio &&
                                                     pessoa.Nascimento > new DateTime(1900, 1, 1) && pessoa.Nascimento < new DateTime(1950, 1, 1));
 
-            var todos = await repositorio.ObterTodosAsync(predicado);
+            var todos = await repositorio.ObterTodosQueryableAsync(predicado);
             Assert.NotNull(todos);
             Assert.Single(todos);
+        }
+
+        [Fact]
+        public async void ObterTodosAsync_Paginado_test()
+        {
+            var paginador = new Paginador { Pagina = 1 };
+            var todos = await repositorio.ObterTodosAsync(c => true, paginador);
+            Assert.NotNull(todos);
+            Assert.True(paginador.TotalRegistros > 1);
         }
     }
 }

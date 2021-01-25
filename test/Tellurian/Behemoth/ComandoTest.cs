@@ -3,10 +3,10 @@ using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Drone.Interfaces;
 using Nebularium.Tellurian.Recursos;
+using Nebularium.Tiamat.Recursos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,7 +26,7 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void AdicionarAsync_test()
         {
-            var pessoaTeste = Pessoa.Pessoas[0];
+            var pessoaTeste = Pessoa.Pessoas[2];
             var pessoa = new Pessoa().Injete(pessoaTeste);
             pessoa.Id = null;
             Assert.Null(pessoa.Id);
@@ -66,38 +66,54 @@ namespace Nebularium.Tellurian.Behemoth
             });
         }
 
+        [Fact]
+        public async void AtualizarUmAsync_test()
+        {
+            var pessoaTeste = consultaRepositorio.ObterTodosQueryableAsync(query => query.Where(p => p.NomeSobrenome.Contains("Melissa")).Take(1)).Result.FirstOrDefault();
+
+            var listaProps = PropriedadeValorFabrica<Pessoa>.Iniciar()
+                                .Add(c => c.Genero, Genero.Indefinido, false)
+                                .Add(c => c.Enderecos, new List<Endereco> { new Endereco { Cep = 12399, Cidade = "Catitu-mirim", Estado = "PA" } });
+            await comandoRepositorio.AtualizarUmAsync(c => c.NomeSobrenome.Contains("Melissa"), listaProps.ObterTodos);
+
+            var pessoaConsulta = await consultaRepositorio.ObterAsync(pessoaTeste.Id);
+            Assert.NotNull(pessoaConsulta);
+            Assert.Equal(Genero.Indefinido, pessoaConsulta.Genero);
+            Assert.NotEmpty(pessoaConsulta.Enderecos);
+        }
 
         [Fact]
-        public async void AtualizarAsync_test()
+        public async void AtualizarMuitosAsync_test()
         {
-            var pessoaTeste = consultaRepositorio.ObterTodosAsync(query => query.Where(p => p.NomeSobrenome != null).Take(1)).Result.FirstOrDefault();
-            var pessoa = new Pessoa().Injete(pessoaTeste);
-            string pattern = @"[\d]";
-            var match = Regex.Match(pessoa.NomeSobrenome, pattern);
+            var listaProps = PropriedadeValorFabrica<Pessoa>.Iniciar()
+                                        .Add(c => c.Genero, Genero.Indefinido, false)
+                                        .Add(c => c.Enderecos, new List<Endereco> { new Endereco { Cep = 11111 } });
+            var resultado = await comandoRepositorio.AtualizarMuitosAsync(c => c.Genero == Genero.Masculino, listaProps.ObterTodos);
 
-            if (match.Success)
-                pessoa.NomeSobrenome = Regex.Replace(pessoa.NomeSobrenome, pattern, $"{int.Parse(match.Value) + 1}");
-            else
-                pessoa.NomeSobrenome += " [1]";
+            Assert.True(resultado);
+            var pessoaConsulta = await consultaRepositorio.ObterTodosAsync(c => c.Genero == Genero.Indefinido);
+            Assert.NotEmpty(pessoaConsulta);
+        }
 
-            Assert.NotEqual(pessoaTeste.NomeSobrenome, pessoa.NomeSobrenome);
-            if (pessoa.Nascimento == default)
-                pessoa.Nascimento = new DateTime(1990, 1, 1);
-            await comandoRepositorio.AtualizarAsync(pessoa);
-            Assert.NotNull(pessoa);
+        [Fact]
+        public async void AtualizarNaMaoAsync_test()
+        {
+            await comandoRepositorio.AtualizarNaMao();
 
-            var pessoaConsulta = await consultaRepositorio.ObterAsync(pessoa.Id);
-            Assert.NotNull(pessoaConsulta);
-            Assert.Equal(pessoa.NomeSobrenome, pessoaConsulta.NomeSobrenome);
-            Assert.NotEqual(pessoaTeste.NomeSobrenome, pessoaConsulta.NomeSobrenome);
+            var pessoaConsulta = await consultaRepositorio.ObterTodosAsync(c => c.NomeSobrenome.Contains("Melissa"));
+            Assert.NotEmpty(pessoaConsulta);
+            var melissa = pessoaConsulta.FirstOrDefault();
+            Assert.Equal(Genero.Indefinido, melissa.Genero);
+            Assert.NotEmpty(melissa.Enderecos);
+            //Assert.True(melissa.Enderecos.Any(e => e.Cidade == "Catitu-mirim"));
         }
 
         [Fact]
         public async void DeletarAsync_test()
         {
-            var pessoaTeste = consultaRepositorio.ObterTodosAsync(query => query.Where(p => p.Id != null)).Result.LastOrDefault();
+            var pessoaTeste = consultaRepositorio.ObterTodosQueryableAsync(query => query.Where(p => p.Id != null)).Result.LastOrDefault();
             Assert.NotNull(pessoaTeste);
-            await comandoRepositorio.RemoverAsync(pessoaTeste);
+            await comandoRepositorio.RemoverUmAsync(pessoaTeste.Id);
 
             var pessoaConsulta = await consultaRepositorio.ObterAsync(pessoaTeste.Id);
             Assert.Null(pessoaConsulta);
@@ -106,13 +122,9 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void DeletarMuitosAsync_test()
         {
-            var pessoasTeste = consultaRepositorio.ObterTodosAsync(query => query.Where(p => p.Id != null)).Result.TakeLast(2);
-            Assert.NotNull(pessoasTeste);
-            Assert.NotEmpty(pessoasTeste);
-            var ids = pessoasTeste.Select(p => p.Id);
-            await comandoRepositorio.RemoverAsync(pessoasTeste);
+            await comandoRepositorio.RemoverMuitosAsync(c => c.Genero == Genero.Indefinido);
 
-            var pessoaConsulta = await consultaRepositorio.ObterTodosAsync(p => ids.Contains(p.Id));
+            var pessoaConsulta = await consultaRepositorio.ObterTodosAsync(p => p.Genero == Genero.Indefinido);
             Assert.Empty(pessoaConsulta);
         }
 

@@ -10,12 +10,13 @@ namespace Nebularium.Tellurian.Drone.Entidades
         [DisplayName]
         public string NomeSobrenome { get; set; }
         [DisplayName]
+        public string Cpf { get; set; }
+        [DisplayName]
         public Genero Genero { get; set; }
         [DisplayName]
         public List<Endereco> Enderecos { get; set; }
         [DisplayName]
-        public DateTime Nascimento { get; set; }
-        public Metadado Metadado { get; set; }
+        public DateTimeOffset Nascimento { get; set; }
 
         public override string ToString()
         {

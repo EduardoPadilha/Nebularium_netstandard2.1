@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Drone.Eventos;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tellurian.Drone.Features;
 using Nebularium.Weaver.Interfaces;
 using System.Threading.Tasks;
 
@@ -9,11 +9,11 @@ namespace Nebularium.Tellurian.Drone.Manipuladores
 {
     public class CadastrarPessoaManipulador : IManipuladorEvento<CadastrarPessoaComandoEvento>
     {
-        private readonly IComandoServico<Pessoa> pessoaComandoServico;
+        private readonly ICadastrarPessoa cadastrarPessoa;
         private readonly ILogger<Pessoa> logger;
-        public CadastrarPessoaManipulador(IComandoServico<Pessoa> pessoaComandoServico, ILogger<Pessoa> logger)
+        public CadastrarPessoaManipulador(ICadastrarPessoa cadastrarPessoa, ILogger<Pessoa> logger)
         {
-            this.pessoaComandoServico = pessoaComandoServico;
+            this.cadastrarPessoa = cadastrarPessoa;
             this.logger = logger;
         }
 
@@ -21,7 +21,7 @@ namespace Nebularium.Tellurian.Drone.Manipuladores
         public Task Resolver(CadastrarPessoaComandoEvento evento)
         {
             logger.LogInformation($"Recebendo evento - {evento.Pessoa.ToString()}");
-            return pessoaComandoServico.AdicionarAsync(evento.Pessoa);
+            return cadastrarPessoa.Executar(evento.Pessoa);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Nebularium.Tellurian.Drone.Entidades;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
 
 namespace Nebularium.Tellurian.Drone.Interfaces
 {

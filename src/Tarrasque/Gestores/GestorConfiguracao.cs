@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tarrasque.Abstracoes;
 
 namespace Nebularium.Tarrasque.Gestores
 {

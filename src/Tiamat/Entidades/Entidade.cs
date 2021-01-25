@@ -1,30 +1,46 @@
-﻿using Nebularium.Tiamat.Interfaces;
+﻿using Nebularium.Tiamat.Abstracoes;
+using System;
 using System.ComponentModel;
 
 namespace Nebularium.Tiamat.Entidades
 {
-    public abstract class Entidade : IEntidade
+    public abstract class Entidade : IEntidade, IEquatable<Entidade>
     {
-        [DisplayName]
-        public string Id { get; set; }
-
-        public override bool Equals(object obj)
+        public Entidade()
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-            return Equals((IEntidade)obj);
+            Metadado = new Metadado();
         }
 
-        public virtual bool Equals(Entidade obj)
+        [DisplayName]
+        public string Id { get; set; }
+        public Metadado Metadado { get; set; }
+
+        #region IEquatable<Entidade>
+
+        public override bool Equals(object outra)
         {
-            return obj.Id == Id;
+            if (outra == null || !GetType().Equals(outra.GetType()))
+                return false;
+
+            return Equals((Entidade)outra);
+        }
+
+        public virtual bool Equals(Entidade outra)
+        {
+            return Id.Equals(outra.Id);
         }
 
         public override int GetHashCode()
         {
             return $"{ GetType().FullName}-{Id}".GetHashCode();
+        }
+
+        #endregion
+
+        public void Cria()
+        {
+            Metadado.Ativo = true;
+            Metadado.DataCriacao = DateTimeOffset.UtcNow;
         }
 
         //public static bool operator ==(Entidade lhs, Entidade rhs)
