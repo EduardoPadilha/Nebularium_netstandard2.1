@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Behemoth.Mongo.Configuracoes;
 using Nebularium.Behemoth.Mongo.Serializadores;
-using Nebularium.Tarrasque.Configuracoes;
+using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
 using System;
 
