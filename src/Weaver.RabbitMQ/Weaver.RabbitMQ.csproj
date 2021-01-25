@@ -3,10 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Nebularium.Weaver.RabbitMQ</RootNamespace>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>Eduardo Padilha</Authors>
     <Product>Nebularium.Weaver.RabbitMQ</Product>
     <Description>Implementação da Weaver em RabbitMQ.</Description>
+    <PackageId>Nebularium.Weaver.RabbitMQ</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

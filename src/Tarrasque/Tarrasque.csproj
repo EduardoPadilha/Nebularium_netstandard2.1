@@ -7,8 +7,10 @@
     <PackageId>Tarrasque</PackageId>
     <Company>Deflagra</Company>
     <Product>Nebularium.Tarrasque</Product>
-    <Version>0.0.4</Version>
+    <Version>0.0.5</Version>
     <Description>Biblioteca com funções, extensões e outros utilitários difíceis de matar no Nebulariun.</Description>
+    <PackageId>Nebularium.Tarrasque</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,11 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Nebularium.Behemoth.Mongo</RootNamespace>
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Behemoth.Mongo</Product>
     <Description>Biblioteca responsável pela persistência com MongoDB no Nebularium.</Description>
+    <PackageId>Nebularium.Behemoth.Mongo</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
