@@ -1,5 +1,5 @@
-﻿using Nebularium.Tarrasque.Abstracoes;
-using Nebularium.Tarrasque.Configuracoes;
+﻿using Nebularium.Behemoth.Mongo.Configuracoes;
+using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Recursos;
 using Xunit;
