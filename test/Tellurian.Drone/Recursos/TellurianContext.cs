@@ -8,5 +8,11 @@ namespace Nebularium.Tellurian.Recursos
         public TellurianContext(IDbConfiguracao mongoConfig) : base(mongoConfig)
         {
         }
+
+        public override bool UsarMapeamentoBsonClassMap => false;
+
+        public override void ConfigurarMapeamentooBsonClassMap()
+        {
+        }
     }
 }
