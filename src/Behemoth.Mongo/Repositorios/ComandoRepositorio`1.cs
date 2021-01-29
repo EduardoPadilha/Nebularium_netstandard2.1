@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Nebularium.Behemoth.Mongo.Abstracoes;
+using Nebularium.Behemoth.Mongo.Mapeamento;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Abstracoes;
 using Nebularium.Tiamat.Entidades;
@@ -12,9 +13,10 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ComandoRepositorio<TEntidade> : ComandoRepositorioBase<TEntidade>,
-       IComandoRepositorio<TEntidade>
-       where TEntidade : Entidade, new()
+    public abstract class ComandoRepositorio<TEntidade, TProxy> : ComandoRepositorioBase<TEntidade, TProxy>,
+        IComandoRepositorio<TEntidade>
+        where TEntidade : Entidade, new()
+        where TProxy : EntidadeMapeamento, new()
     {
         protected ComandoRepositorio(IMongoContexto contexto, ILogger<TEntidade> logger) : base(contexto, logger)
         {

@@ -16,6 +16,10 @@ namespace Nebularium.Tarrasque.Extensoes
         {
             return Regex.Replace(str, @"\s+", " ");
         }
+        public static String SnakeCase(this String str)
+        {
+            return str.LimpoNuloBranco() ? str : Regex.Replace(str, "(?<=.)([A-Z])", "_$1").ToLower().Trim();
+        }
         public static string RemoverCaracteresEspeciais(this string str)
         {
             return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"[^0-9a-zA-ZéúíóáÉÚÍÓÁèùìòàÈÙÌÒÀõãñÕÃÑêûîôâÊÛÎÔÂëÿüïöäËYÜÏÖÄçÇ\s]+?", string.Empty);

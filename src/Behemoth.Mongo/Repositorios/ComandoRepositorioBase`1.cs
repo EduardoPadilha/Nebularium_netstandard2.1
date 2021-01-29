@@ -12,8 +12,9 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ComandoRepositorioBase<TEntidade> : RepositorioBase<TEntidade>, IComandoRepositorioBase<TEntidade>
+    public abstract class ComandoRepositorioBase<TEntidade, TProxy> : RepositorioBase<TProxy>, IComandoRepositorioBase<TEntidade>
         where TEntidade : IEntidade, new()
+        where TProxy : IEntidade, new()
     {
         protected readonly ILogger<TEntidade> logger;
         public ComandoRepositorioBase(IMongoContexto contexto, ILogger<TEntidade> logger) : base(contexto)
@@ -21,12 +22,15 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             this.logger = logger;
         }
 
+        protected override string NomeColecao => typeof(TEntidade).Name.SnakeCase();
+
         public virtual Task AdicionarAsync(TEntidade entidade)
         {
             try
             {
-                return colecao.InsertOneAsync(entidade)
-                     .ContinueWith(e => entidade.Injete(entidade));
+                var proxy = entidade.Como<TProxy>();
+                return colecao.InsertOneAsync(proxy)
+                     .ContinueWith(e => entidade.Injete(proxy));
             }
             catch (Exception ex)
             {
@@ -39,8 +43,9 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             try
             {
-                return colecao.InsertManyAsync(entidades)
-                     .ContinueWith(e => entidades.Injete(entidades));
+                var proxys = entidades.Como<IEnumerable<TProxy>>();
+                return colecao.InsertManyAsync(proxys)
+                     .ContinueWith(e => entidades.Injete(proxys));
             }
             catch (Exception ex)
             {
@@ -53,8 +58,8 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             try
             {
-                var definicoes = propriedades.ObterUpdate<TEntidade>();
-                return colecao.UpdateOneAsync(predicado, definicoes).ContinueWith(task => task.Result.ModifiedCount >= 1);
+                var definicoes = propriedades.ObterUpdate<TProxy>();
+                return colecao.UpdateOneAsync(predicado.ConvertePredicado<TEntidade, TProxy>(), definicoes).ContinueWith(task => task.Result.ModifiedCount >= 1);
             }
             catch (Exception ex)
             {
@@ -67,8 +72,8 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             try
             {
-                var definicoes = propriedades.ObterUpdate<TEntidade>();
-                return colecao.UpdateManyAsync(predicado, definicoes).ContinueWith(task => task.Result.ModifiedCount >= 1);
+                var definicoes = propriedades.ObterUpdate<TProxy>();
+                return colecao.UpdateManyAsync(predicado.ConvertePredicado<TEntidade, TProxy>(), definicoes).ContinueWith(task => task.Result.ModifiedCount >= 1);
             }
             catch (Exception ex)
             {
@@ -94,7 +99,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             try
             {
-                return colecao.DeleteManyAsync(predicado).ContinueWith(task => task.Result.DeletedCount >= 1);
+                return colecao.DeleteManyAsync(predicado.ConvertePredicado<TEntidade, TProxy>()).ContinueWith(task => task.Result.DeletedCount >= 1);
             }
             catch (Exception ex)
             {

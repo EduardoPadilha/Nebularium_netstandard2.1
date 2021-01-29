@@ -11,7 +11,7 @@ namespace Nebularium.Tellurian.Recursos
 
         public override bool UsarMapeamentoBsonClassMap => false;
 
-        public override void ConfigurarMapeamentooBsonClassMap()
+        public override void ConfigurarMapeamentoBsonClassMap()
         {
         }
     }

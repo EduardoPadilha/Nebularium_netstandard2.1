@@ -1,8 +1,6 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Behemoth.Mongo.Configuracoes;
@@ -34,7 +32,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                 if (UsarMapeamentoBsonClassMap)
                 {
                     MapearEntidadesBase();
-                    ConfigurarMapeamentooBsonClassMap();
+                    ConfigurarMapeamentoBsonClassMap();
                 }
 
                 cliente = new MongoClient(this.mongoConfig.ConnectionString);
@@ -52,9 +50,13 @@ namespace Nebularium.Behemoth.Mongo.Contextos
             return database.GetCollection<T>(nome.LimpoNuloBranco() ? typeof(T).Name : nome);
         }
 
+        public virtual IMongoCollection<T> ObterColecao<T>(string nomeColecao)
+        {
+            return database.GetCollection<T>(nomeColecao);
+        }
 
         public abstract bool UsarMapeamentoBsonClassMap { get; }
-        public abstract void ConfigurarMapeamentooBsonClassMap();
+        public abstract void ConfigurarMapeamentoBsonClassMap();
 
         protected virtual void MapearEntidadesBase()
         {
@@ -62,8 +64,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
             {
                 cm.AutoMap();
                 cm.MapIdProperty(c => c.Id)
-                    .SetIdGenerator(StringObjectIdGenerator.Instance)
-                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+                    .SetIdGenerator(GuidGenerator.Instance);
             });
             BsonClassMap.RegisterClassMap<Metadado>();
         }

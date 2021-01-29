@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Nebularium.Behemoth.Mongo.Abstracoes;
+using Nebularium.Behemoth.Mongo.Mapeamento;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Abstracoes;
 using Nebularium.Tiamat.Entidades;
@@ -12,35 +13,37 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ConsultaRepositorio<TEntidade> : ConsultaRepositorioBase<TEntidade>,
+    public abstract class ConsultaRepositorio<TEntidade, TProxy> : ConsultaRepositorioBase<TEntidade, TProxy>,
         IConsultaRepositorio<TEntidade>
          where TEntidade : Entidade, new()
+        where TProxy : EntidadeMapeamento, new()
     {
         protected ConsultaRepositorio(IMongoContexto contexto) : base(contexto)
         {
         }
 
-        public override IOrderedMongoQueryable<TEntidade> OrdernarPadrao(IMongoQueryable<TEntidade> query)
+        public override IOrderedMongoQueryable<TProxy> OrdernarPadrao(IMongoQueryable<TProxy> query)
         {
             return query.OrderBy(c => c.Metadado.DataCriacao);
         }
-        protected override IMongoQueryable<TEntidade> ObterTodos()
+        protected override IMongoQueryable<TProxy> ObterTodos()
         {
             return OrdernarPadrao(colecao.AsQueryable().Where(c => !c.Metadado.DataDelecao.HasValue));
         }
-        protected virtual IMongoQueryable<TEntidade> ObterTodosAtivos()
+        protected virtual IMongoQueryable<TProxy> ObterTodosAtivos()
         {
             return ObterTodos().Where(c => c.Metadado.Ativo);
         }
-        protected virtual IMongoQueryable<TEntidade> ObterTodosAtivos<T>(IFiltro<T> filtro)
+        protected virtual IMongoQueryable<TProxy> ObterTodosAtivos<T>(IFiltro<T> filtro)
         {
-            return ObterTodosAtivos().Where(filtro.ObterPredicados().ConvertePredicado<T, TEntidade>());
+            return ObterTodosAtivos().Where(filtro.ObterPredicados().ConvertePredicado<T, TProxy>());
         }
 
         #region Implementação IConsultaRepositorio
         public virtual Task<TEntidade> ObterAtivoAsync(string id)
         {
-            return ObterTodosAtivos().FirstOrDefaultAsync(c => c.Id == id);
+            var resultado = ObterTodosAtivos().FirstOrDefaultAsync(c => c.Id == id);
+            return resultado.ComoAsync<TProxy, TEntidade>();
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync(IFiltro<TEntidade> filtro, IPaginador paginador = null)
         {
@@ -57,7 +60,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAtivosAsync<T>(Expression<Func<T, bool>> predicado, IPaginador paginador = null)
         {
-            var query = ObterTodosAtivos().Where(predicado.ConvertePredicado<T, TEntidade>());
+            var query = ObterTodosAtivos().Where(predicado.ConvertePredicado<T, TProxy>());
             return ProcessarBuscas(query, paginador);
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAtivosAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado, IPaginador paginador = null)
@@ -66,8 +69,8 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAtivosAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado, IPaginador paginador = null)
         {
-            var predicadoConvertido = predicado.ConvertePredicado<T, TEntidade>();
-            var query = (IMongoQueryable<TEntidade>)predicadoConvertido.Compile()(ObterTodosAtivos());
+            var predicadoConvertido = predicado.ConvertePredicado<T, TProxy>();
+            var query = (IMongoQueryable<TProxy>)predicadoConvertido.Compile()(ObterTodosAtivos());
             return ProcessarBuscas(query, paginador);
         }
         #endregion

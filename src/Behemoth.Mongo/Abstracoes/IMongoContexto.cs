@@ -7,5 +7,6 @@ namespace Nebularium.Behemoth.Mongo.Abstracoes
     {
         IMongoDatabase OberDataBase { get; }
         IMongoCollection<T> ObterColecao<T>();
+        IMongoCollection<T> ObterColecao<T>(string nomeColecao);
     }
 }
