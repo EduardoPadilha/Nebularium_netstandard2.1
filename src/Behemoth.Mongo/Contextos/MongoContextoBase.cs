@@ -1,6 +1,8 @@
-﻿using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Behemoth.Mongo.Configuracoes;
@@ -19,6 +21,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
         protected IDbConfiguracao mongoConfig { get; set; }
 
         public IMongoDatabase OberDataBase => database;
+        public IDbConfiguracao ObterConfiguracao => mongoConfig;
 
         protected MongoContextoBase(IDbConfiguracao mongoConfig)
         {
@@ -26,8 +29,12 @@ namespace Nebularium.Behemoth.Mongo.Contextos
             try
             {
                 BsonSerializer.RegisterSerializer(new DateTimeOffsetSupportingBsonDateTimeSerializer());
-                var camelCaseConventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
-                ConventionRegistry.Register("CamelCase", camelCaseConventionPack, type => true);
+                var nebulariumConvensionPack = new ConventionPack
+                {
+                    new CamelCaseElementNameConvention(),
+                    new IgnoreExtraElementsConvention(true)
+                };
+                ConventionRegistry.Register("NebulariumConvencao", nebulariumConvensionPack, type => true);
 
                 if (UsarMapeamentoBsonClassMap)
                 {
@@ -63,8 +70,10 @@ namespace Nebularium.Behemoth.Mongo.Contextos
             BsonClassMap.RegisterClassMap<Entidade>(cm =>
             {
                 cm.AutoMap();
-                cm.MapIdProperty(c => c.Id)
-                    .SetIdGenerator(GuidGenerator.Instance);
+                cm
+                .MapIdProperty(c => c.Id)
+                .SetIdGenerator(StringObjectIdGenerator.Instance)
+                .SetSerializer(new StringSerializer(BsonType.ObjectId));
             });
             BsonClassMap.RegisterClassMap<Metadado>();
         }

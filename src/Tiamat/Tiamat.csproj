@@ -6,10 +6,11 @@
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Tiamat</Product>
-    <Version>0.0.8</Version>
+    <Version>0.0.9</Version>
     <Description>Biblioteca contendo inteligência central e orquestração para as demais bibliotecas Nebularium.</Description>
     <PackageId>Nebularium.Tiamat</PackageId>
     <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>

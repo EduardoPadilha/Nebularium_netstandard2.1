@@ -4,6 +4,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 {
     public class ObjetoDado<T>
     {
+        public ObjetoDado() { }
         public ObjetoDado(T resultado)
         {
             Resultado = resultado;
@@ -14,6 +15,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class CriacaoDado
     {
+        public CriacaoDado() { }
         public CriacaoDado(string id)
         {
             Id = id;
@@ -24,6 +26,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class SucessoDado
     {
+        public SucessoDado() { }
         public SucessoDado(bool sucesso)
         {
             Sucesso = sucesso;
@@ -34,6 +37,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class ListaDado<T>
     {
+        public ListaDado() { }
         public ListaDado(List<T> itens)
         {
             Itens = itens;

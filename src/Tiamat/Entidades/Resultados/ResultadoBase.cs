@@ -1,9 +1,7 @@
-﻿using Nebularium.Tarrasque.Extensoes;
-using Nebularium.Tiamat.Abstracoes;
+﻿using Nebularium.Tiamat.Abstracoes;
 using Nebularium.Tiamat.Enumeracoes;
 using Nebularium.Tiamat.Recursos;
 using Nebularium.Tiamat.Validacoes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,16 +9,31 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 {
     public abstract class ResultadoBase<T> : IResultado<T>
     {
-        public IMetadadoResultado Metadado { get; protected set; }
-        public T Dado { get; protected set; }
+        public IMetadadoResultado Metadado { get; set; }
+        public T Dado { get; set; }
+    }
+
+    public class Resultado<T> : ResultadoBase<T>
+    {
+        public Resultado() { }
+        public Resultado(T obj, TipoResultado tipoResultado)
+        {
+            Metadado = new MetadadoResultado(tipoResultado);
+            Dado = obj;
+        }
+        public static Resultado<T> Retorno(T obj, TipoResultado tipoResultado)
+        {
+            return new Resultado<T>(obj, tipoResultado);
+        }
     }
 
     public class CriacaoResultado : ResultadoBase<CriacaoDado>
     {
+        public CriacaoResultado() { }
         public CriacaoResultado(string id)
         {
             Metadado = new MetadadoResultado(TipoResultado.String);
-            Dado = new CriacaoDado(id.LimpoNuloBranco() ? null : id);
+            Dado = new CriacaoDado(id);
         }
         public static CriacaoResultado Retorno(string id)
         {
@@ -30,6 +43,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class SucessoResultado : ResultadoBase<SucessoDado>
     {
+        public SucessoResultado() { }
         public SucessoResultado(bool valor)
         {
             Metadado = new MetadadoResultado(TipoResultado.Bool);
@@ -43,6 +57,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class ListaResultado<T> : ResultadoBase<ListaDado<T>>
     {
+        public ListaResultado() { }
         public ListaResultado(List<T> lista, IPaginador paginador)
         {
             Metadado = new MetadadoPaginado(paginador);
@@ -56,6 +71,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class ObjetoResultado<T> : ResultadoBase<ObjetoDado<T>>
     {
+        public ObjetoResultado() { }
         public ObjetoResultado(T obj)
         {
             Metadado = new MetadadoResultado(TipoResultado.Object);
@@ -67,21 +83,9 @@ namespace Nebularium.Tiamat.Entidades.Resultados
         }
     }
 
-    public class Resultado<T> : ResultadoBase<T>
-    {
-        public Resultado(T obj, TipoResultado tipoResultado)
-        {
-            Metadado = new MetadadoResultado(tipoResultado);
-            Dado = obj;
-        }
-        public static Resultado<T> Retorno(T obj, TipoResultado tipoResultado)
-        {
-            return new Resultado<T>(obj, tipoResultado);
-        }
-    }
-
     public class ObjetoPaginadoResultado<T> : ResultadoBase<ObjetoDado<T>>
     {
+        public ObjetoPaginadoResultado() { }
         public ObjetoPaginadoResultado(T obj, IPaginador paginador)
         {
             Metadado = new MetadadoPaginado(paginador);
@@ -95,6 +99,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
 
     public class ErroValidacaoResultado : ResultadoBase<ListaDado<ErroValidacao>>
     {
+        public ErroValidacaoResultado() { }
         public ErroValidacaoResultado(List<ErroValidacao> lista, IPaginador paginador)
         {
             Metadado = new MetadadoPaginado(paginador);

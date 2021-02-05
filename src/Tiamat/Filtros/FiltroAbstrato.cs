@@ -9,8 +9,8 @@ namespace Nebularium.Tiamat.Filtros
 {
     public abstract class FiltroAbstrato<TEntidade> : IFiltro<TEntidade> where TEntidade : IEntidade, new()
     {
-        private readonly Dictionary<string, Expression<Func<TEntidade, bool>>> criterios;
-        private readonly Dictionary<string, Expression<Func<TEntidade, bool>>> condicoes;
+        protected readonly Dictionary<string, Expression<Func<TEntidade, bool>>> criterios;
+        protected readonly Dictionary<string, Expression<Func<TEntidade, bool>>> condicoes;
         public TEntidade Criterio { get; set; }
         protected FiltroAbstrato()
         {
@@ -53,6 +53,14 @@ namespace Nebularium.Tiamat.Filtros
                         ExpressoesAtivas = ExpressoesAtivas.And(criterios[k]);
             }
             return ExpressoesAtivas;
+        }
+    }
+    public abstract class FiltroAbstrato<TEntidade, TCriterio> : FiltroAbstrato<TEntidade> where TEntidade : IEntidade, new() where TCriterio : new()
+    {
+        public new TCriterio Criterio { get; set; }
+        public FiltroAbstrato()
+        {
+            Criterio = new TCriterio();
         }
     }
 }
