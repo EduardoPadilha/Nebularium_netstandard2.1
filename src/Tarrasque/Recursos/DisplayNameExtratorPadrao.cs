@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Gestores;
-using Nebularium.Tarrasque.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;

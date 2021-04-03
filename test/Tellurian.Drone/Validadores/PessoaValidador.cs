@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tellurian.Drone.Entidades;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
 using Nebularium.Tiamat.Validacoes;
 
 namespace Nebularium.Tellurian.Mock
@@ -15,6 +15,12 @@ namespace Nebularium.Tellurian.Mock
                 .WithMessage("{PropertyName} não pode ser vazio")
                 .MinimumLength(3)
                 .MaximumLength(100);
+
+            RuleFor(c => c.Cpf)
+                .NotEmpty()
+                .WithMessage("{PropertyName} não pode ser vazio")
+                .Length(11)
+                .WithMessage("{PropertyName} só pode ter 11 dígitos");
 
             RuleFor(c => c.Enderecos)
                 .NotNull()

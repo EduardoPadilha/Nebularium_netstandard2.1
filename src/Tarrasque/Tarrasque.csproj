@@ -7,14 +7,19 @@
     <PackageId>Tarrasque</PackageId>
     <Company>Deflagra</Company>
     <Product>Nebularium.Tarrasque</Product>
-    <Version>0.0.4</Version>
+    <Version>0.0.10</Version>
     <Description>Biblioteca com funções, extensões e outros utilitários difíceis de matar no Nebulariun.</Description>
+    <PackageId>Nebularium.Tarrasque</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.8" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.13" />
   </ItemGroup>
 
 </Project>

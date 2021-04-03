@@ -16,6 +16,10 @@ namespace Nebularium.Tarrasque.Extensoes
         {
             return Regex.Replace(str, @"\s+", " ");
         }
+        public static String SnakeCase(this String str)
+        {
+            return str.LimpoNuloBranco() ? str : Regex.Replace(str, "(?<=.)([A-Z])", "_$1").ToLower().Trim();
+        }
         public static string RemoverCaracteresEspeciais(this string str)
         {
             return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"[^0-9a-zA-ZéúíóáÉÚÍÓÁèùìòàÈÙÌÒÀõãñÕÃÑêûîôâÊÛÎÔÂëÿüïöäËYÜÏÖÄçÇ\s]+?", string.Empty);
@@ -86,6 +90,68 @@ namespace Nebularium.Tarrasque.Extensoes
             if (todas)
                 return s.ToUpperInvariant();
             return string.Format("{0}{1}", s.Substring(0, 1), s.Substring(s.Length - 1, 1));
+        }
+
+        public static bool ValidarCnpj(this string cnpj)
+        {
+            if (string.IsNullOrWhiteSpace(cnpj))
+            {
+                return false;
+            }
+
+            int[] multiplicador1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicador2 = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int soma;
+            int resto;
+            string digito;
+            string tempCnpj;
+            cnpj = cnpj.Trim();
+            cnpj = cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            if (cnpj.Length != 14)
+                return false;
+            tempCnpj = cnpj.Substring(0, 12);
+            soma = 0;
+            for (int i = 0; i < 12; i++)
+                soma += int.Parse(tempCnpj[i].ToString()) * multiplicador1[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = resto.ToString();
+            tempCnpj = tempCnpj + digito;
+            soma = 0;
+            for (int i = 0; i < 13; i++)
+                soma += int.Parse(tempCnpj[i].ToString()) * multiplicador2[i];
+            resto = soma % 11;
+            if (resto < 2)
+                resto = 0;
+            else
+                resto = 11 - resto;
+            digito = digito + resto.ToString();
+            return cnpj.EndsWith(digito);
+        }
+
+        public static string FormataCNPJ(this string cnpj)
+        {
+            return cnpj.RemoverCaracteresEspeciais().Como<long>().ToString(@"00\.000\.000\/0000\-00");
+        }
+
+        public static string FormataCPF(this string cnpj)
+        {
+            return cnpj.RemoverCaracteresEspeciais().Como<long>().ToString(@"000\.000\.000\-00");
+        }
+        public static string TrataNomeArquivo(this string str)
+        {
+            return string.IsNullOrEmpty(str) ? str : Regex.Replace(str, @"[^0-9a-zA-Z-._\s]+?", string.Empty);
+        }
+        public static string GerarNomeArquivo(this string prefixo, string extensao, bool datado = true, string formatoData = "ddMMyyyHHmmss")
+        {
+            string dataFormatada = "";
+            if (datado)
+                dataFormatada = $"-{DateTimeOffset.Now.ToDatetimeBr().ToString(formatoData)}";
+
+            return $"{prefixo.TrataNomeArquivo()}{dataFormatada}.{extensao.RemoverCaracteresEspeciais()}";
         }
     }
 }

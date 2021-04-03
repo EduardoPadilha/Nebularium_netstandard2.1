@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nebularium.Tarrasque.Gestores;
+using Nebularium.Tarrasque.Recursos;
 using Nebularium.Tellurian.Drone.Manipuladores;
+using Nebularium.Tiamat.Recursos;
 using System;
 
 namespace Nebularium.Tellurian.Drone.Recursos
@@ -25,16 +27,16 @@ namespace Nebularium.Tellurian.Drone.Recursos
             Servicos.AddSingleton(sp => configuracao);
 
             Servicos
+                .AddContextoNotificacao()
+                .AddRepositoriosAutoMapper()
+                .AddRepositorios()
                 .AddRecursos()
-                .AddValidadores()
-                .AddFiltros()
-                .AddServicos()
-                .AddDbContexto(configuracao)
+                .AddFeatures()
+                .AddComandos()
+                .AddGestorDependenciaAspnetPadrao()
                 .AddIntegrationServices(configuracao)
                 .AddBarramentoEventos(configuracao)
                 .AddTransient<CadastrarPessoaManipulador>();
-
-
 
             Container = Servicos.BuildServiceProvider();//(new ServiceProviderOptions { ValidateOnBuild = true });
         }

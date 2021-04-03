@@ -1,4 +1,4 @@
-﻿using Nebularium.Tarrasque.Interfaces;
+﻿using Nebularium.Tarrasque.Abstracoes;
 using System;
 
 namespace Nebularium.Tarrasque.Gestores

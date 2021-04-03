@@ -1,11 +1,17 @@
 ﻿using Nebularium.Behemoth.Mongo.Contextos;
-using Nebularium.Tarrasque.Configuracoes;
+using Nebularium.Tarrasque.Abstracoes;
 
 namespace Nebularium.Tellurian.Recursos
 {
-    public class TellurianContext : MongoContexto
+    public class TellurianContext : MongoContextoBase
     {
-        public TellurianContext(IDbConfigs mongoConfig) : base(mongoConfig)
+        public TellurianContext(IDbConfiguracao mongoConfig) : base(mongoConfig)
+        {
+        }
+
+        public override bool UsarMapeamentoBsonClassMap => false;
+
+        public override void ConfigurarMapeamentoBsonClassMap()
         {
         }
     }

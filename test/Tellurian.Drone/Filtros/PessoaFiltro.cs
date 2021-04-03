@@ -17,6 +17,8 @@ namespace Nebularium.Tellurian.Drone.Filtros
         {
             AdicionarRegra(c => c.NomeSobrenome.Contains(Criterio.NomeSobrenome))
                 .SobCondicional(c => !Criterio.NomeSobrenome.LimpoNuloBranco());
+            AdicionarRegra(c => c.Cpf.Equals(Criterio.Cpf))
+                .SobCondicional(c => !Criterio.Cpf.LimpoNuloBranco());
             AdicionarRegra(c => c.Genero == Genero)
                 .SobCondicional(c => Genero != null);
             AdicionarRegra(c => c.Enderecos != null && c.Enderecos.Any(e => e.Cidade.ToLower().Contains(Cidade.ToLower())))

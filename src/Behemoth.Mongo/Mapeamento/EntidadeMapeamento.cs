@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
 
 namespace Nebularium.Behemoth.Mongo.Mapeamento
 {
@@ -10,13 +10,14 @@ namespace Nebularium.Behemoth.Mongo.Mapeamento
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        public MetadadoMapeamento Metadado { get; set; }
+
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
-            {
                 return false;
-            }
-            return Equals((IEntidade)obj);
+
+            return Equals((EntidadeMapeamento)obj);
         }
 
         public virtual bool Equals(EntidadeMapeamento obj)

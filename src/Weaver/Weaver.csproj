@@ -6,12 +6,15 @@
     <Product>Nebularium.Weaver</Product>
     <Company>Deflagra</Company>
     <Authors>Eduardo Padilha</Authors>
-    <Version>0.0.2</Version>
+    <Version>0.0.10</Version>
     <Description>A tecelã, responsável pela sincronia, comunicações e protocolos. Ela é a Unidade no Nebularium.</Description>
+    <PackageId>Nebularium.Weaver</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>

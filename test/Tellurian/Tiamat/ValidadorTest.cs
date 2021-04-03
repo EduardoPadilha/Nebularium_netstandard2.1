@@ -2,7 +2,7 @@
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Recursos;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
 using System.Linq;
 using Xunit;
 using Xunit.Abstractions;

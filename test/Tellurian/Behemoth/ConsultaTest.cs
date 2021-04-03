@@ -2,13 +2,14 @@
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Drone.Filtros;
-using Nebularium.Tellurian.Drone.Interfaces;
 using Nebularium.Tellurian.Recursos;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 using Xunit.Abstractions;
+using Nebularium.Tiamat.Recursos;
+using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 
 namespace Nebularium.Tellurian.Behemoth
 {
@@ -23,7 +24,7 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void ObterAsync_test()
         {
-            var id = "5f893ac47e7e53f03ef968c9";
+            var id = "6068f6f4e76288094363064b";
             var entidade = await repositorio.ObterAsync(id);
             Assert.NotNull(entidade);
         }
@@ -31,7 +32,7 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void ObterTodosAsync_PorFiltro_test()
         {
-            var criterio = new Pessoa { NomeSobrenome = "Eduardo" };
+            var criterio = new Pessoa { NomeSobrenome = "Almada" };
             var filtro = new PessoaFiltro();
             filtro.DataInicio = new DateTime(1900, 1, 1);
             filtro.DataFim = new DateTime(1990, 1, 1);
@@ -63,9 +64,18 @@ namespace Nebularium.Tellurian.Behemoth
                                                     pessoa.Genero == Genero.Feminio &&
                                                     pessoa.Nascimento > new DateTime(1900, 1, 1) && pessoa.Nascimento < new DateTime(1950, 1, 1));
 
-            var todos = await repositorio.ObterTodosAsync(predicado);
+            var todos = await repositorio.ObterTodosQueryableAsync(predicado);
             Assert.NotNull(todos);
             Assert.Single(todos);
+        }
+
+        [Fact]
+        public async void ObterTodosAsync_Paginado_test()
+        {
+            var paginador = new Paginador { Pagina = 1 };
+            var todos = await repositorio.ObterTodosAsync(c => true, paginador);
+            Assert.NotNull(todos);
+            Assert.True(paginador.TotalRegistros > 1);
         }
     }
 }

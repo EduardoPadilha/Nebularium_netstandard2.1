@@ -1,103 +1,94 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
-using Nebularium.Behemoth.Mongo.Contextos;
+using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
-using Nebularium.Tiamat.Interfaces;
+using Nebularium.Tiamat.Abstracoes;
+using Nebularium.Tiamat.Entidades;
+using Nebularium.Tiamat.Recursos;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ComandoRepositorio<TEntidade, TProxy> : IComandoRepositorio<TEntidade>
-        where TEntidade : IEntidade, new()
-        where TProxy : IEntidade, new()
+    public abstract class ComandoRepositorio<TEntidade> : ComandoRepositorioBase<TEntidade>,
+       IComandoRepositorio<TEntidade>
+       where TEntidade : Entidade, new()
     {
-        protected IMongoContext context { get; }
-        private readonly ILogger logger;
-        public ComandoRepositorio(IMongoContext context, ILogger<TEntidade> logger)
+        protected ComandoRepositorio(IMongoContexto contexto, ILogger<TEntidade> logger) : base(contexto, logger)
         {
-            this.context = context;
-            this.logger = logger;
         }
 
-        public virtual Task AdicionarAsync(TEntidade entidade)
+        public async override Task AdicionarAsync(IEnumerable<TEntidade> entidades)
         {
-            try
+            foreach (var entidade in entidades)
             {
-                var proxy = entidade.Como<TProxy>();
-                return context.ObterColecao<TProxy>().InsertOneAsync(proxy)
-                     .ContinueWith(e => entidade.Injete(proxy));
+                await ValidaUnicidade(entidade);
+                entidade.Cria();
             }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao adicionar entidade");
-                throw;
-            }
+
+            await base.AdicionarAsync(entidades);
         }
 
-        public virtual Task AdicionarAsync(IEnumerable<TEntidade> entidades)
+        public async override Task AdicionarAsync(TEntidade entidade)
         {
-            try
-            {
-                var proxys = entidades.Como<IEnumerable<TProxy>>();
-                return context.ObterColecao<TProxy>().InsertManyAsync(proxys)
-                     .ContinueWith(e => entidades.Injete(proxys));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao adicionar entidade");
-                throw;
-            }
+            await ValidaUnicidade(entidade);
+
+            entidade.Cria();
+
+            await base.AdicionarAsync(entidade);
         }
 
-        public virtual Task AtualizarAsync(TEntidade entidade)
+        public async override Task<bool> AtualizarMuitosAsync(Expression<Func<TEntidade, bool>> predicado, List<PropriedadeValor> propriedades)
         {
-            try
-            {
-                var proxy = entidade.Como<TProxy>();
-                return context.ObterColecao<TProxy>().ReplaceOneAsync(x => x.Id == entidade.Id, proxy);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao adicionar entidade");
-                throw;
-            }
+            await ValidaUnicidadeAtualizacao(predicado, propriedades);
+
+            propriedades.Add(PropriedadeValor.Cria<TEntidade, DateTimeOffset?>(c => c.Metadado.DataAtualizacao, DateTimeOffset.UtcNow));
+
+            return await base.AtualizarMuitosAsync(predicado, propriedades);
         }
 
-        //public Task AtualizarAsync(IEnumerable<TEntidade> entidades)
-        //{
-        //    var proxys = entidades.Como<IEnumerable<TProxy>>();
-        //    return context.ObterColecao<TProxy>().UpdateManyAsync(proxys)
-        //         .ContinueWith(e => entidades.Injete(proxys));
-        //}
-
-        public virtual Task RemoverAsync(TEntidade entidade)
+        public async override Task<bool> AtualizarUmAsync(Expression<Func<TEntidade, bool>> predicado, List<PropriedadeValor> propriedades)
         {
-            try
-            {
-                return context.ObterColecao<TProxy>().DeleteOneAsync(x => x.Id == entidade.Id);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao adicionar entidade");
-                throw;
-            }
+            await ValidaUnicidadeAtualizacao(predicado, propriedades);
+
+            propriedades.Add(PropriedadeValor.Cria<TEntidade, DateTimeOffset?>(c => c.Metadado.DataAtualizacao, DateTimeOffset.UtcNow));
+            return await base.AtualizarUmAsync(predicado, propriedades);
         }
 
-        public virtual Task RemoverAsync(IEnumerable<TEntidade> entidades)
+        public override Task<bool> RemoverMuitosAsync(Expression<Func<TEntidade, bool>> predicado)
         {
-            try
-            {
-                var proxyIds = entidades.Select(e => e.Id);
-                return context.ObterColecao<TProxy>().DeleteManyAsync(x => proxyIds.Contains(x.Id));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Erro ao adicionar entidade");
-                throw;
-            }
+            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
+                .Add(c => c.Metadado.DataDelecao, DateTimeOffset.UtcNow)
+                .Add(c => c.Metadado.Ativo, false);
+            return base.AtualizarMuitosAsync(predicado, propriedades.ObterTodos);
         }
+
+        public override Task<bool> RemoverUmAsync(string id)
+        {
+            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
+                .Add(c => c.Metadado.DataDelecao, DateTimeOffset.UtcNow)
+                .Add(c => c.Metadado.Ativo, false, false);
+            return base.AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
+        }
+
+
+        public async virtual Task<bool> AtivarDesativarUmAsync(string id, bool ativar)
+        {
+            if (ativar)
+                await ValidaUnicidadeAtivacao(id);
+
+            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar().Add(c => c.Metadado.Ativo, ativar);
+            return await AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
+        }
+        private async Task ValidaUnicidadeAtivacao(string id)
+        {
+            var entidade = await colecao.FindAsync(c => c.Id == id);
+            await ValidaUnicidade(entidade.Como<TEntidade>());
+        }
+
+        protected abstract Task ValidaUnicidade(TEntidade entidade);
+        protected abstract Task ValidaUnicidadeAtualizacao(Expression<Func<TEntidade, bool>> predicado, List<PropriedadeValor> propriedades);
     }
 }

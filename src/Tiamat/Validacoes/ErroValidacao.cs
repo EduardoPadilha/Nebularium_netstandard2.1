@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Nebularium.Tiamat.Validacoes
+﻿namespace Nebularium.Tiamat.Validacoes
 {
     public class ErroValidacao
     {
-        public string Mensagem { get; set; }
         public string NomePropriedade { get; set; }
+        public string Mensagem { get; set; }
 
         public override string ToString()
         {

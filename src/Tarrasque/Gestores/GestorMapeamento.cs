@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Nebularium.Tarrasque.Interfaces;
+using Nebularium.Tarrasque.Abstracoes;
 using System;
 using System.Collections.Generic;
 
@@ -15,8 +15,9 @@ namespace Nebularium.Tarrasque.Gestores
             Instancia = new T();
             var config = new MapperConfiguration(cfg =>
             {
-                foreach (var exp in Instancia.ConfigsAdicionais)
-                    exp.Invoke(cfg);
+                if (Instancia.ConfigsAdicionais != null)
+                    foreach (var exp in Instancia.ConfigsAdicionais)
+                        exp.Invoke(cfg);
 
                 foreach (var p in Instancia.PerfisConfigurados)
                     cfg.AddProfile(p);
