@@ -2,6 +2,7 @@
 using Nebularium.Tarrasque.Funcoes;
 using Nebularium.Tarrasque.Gestores;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -46,6 +47,10 @@ namespace Nebularium.Tarrasque.Extensoes
         public static TypeInfo ObterTypeInfoSemProxy(this object tipo)
         {
             return TypeExtensao.ObterTypeInfoSemProxy(tipo.GetType());
+        }
+        public static bool NuloOuDefault<T>(this T obj)
+        {
+            return obj == null || EqualityComparer<T>.Default.Equals(obj, default);
         }
         public static T Como<T>(this object obj, bool naoMapear = false, bool permitirExcecao = false, T valorPadrao = default)
         {

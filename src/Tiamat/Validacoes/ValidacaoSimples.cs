@@ -1,4 +1,5 @@
-﻿using Nebularium.Tiamat.Abstracoes;
+﻿using Nebularium.Tarrasque.Extensoes;
+using Nebularium.Tiamat.Abstracoes;
 using System;
 using System.Collections.Generic;
 
@@ -26,6 +27,7 @@ namespace Nebularium.Tiamat.Validacoes
     {
         private readonly List<ValidacaoSimples> validacaoes;
         public Action<List<ValidacaoSimples>> EventoFalhaValidacao { get; set; }
+        public bool TemValidacao => validacaoes.AnySafe();
 
         public ValidadorSimples()
         {

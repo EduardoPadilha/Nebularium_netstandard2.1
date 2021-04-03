@@ -32,6 +32,7 @@ namespace Nebularium.Tellurian.Drone.Recursos
                 .AddRepositorios()
                 .AddRecursos()
                 .AddFeatures()
+                .AddComandos()
                 .AddGestorDependenciaAspnetPadrao()
                 .AddIntegrationServices(configuracao)
                 .AddBarramentoEventos(configuracao)

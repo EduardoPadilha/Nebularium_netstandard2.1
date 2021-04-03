@@ -28,7 +28,7 @@ namespace Nebularium.Tellurian.Drone.Features
             {
                 await repositorio.AdicionarAsync(inbound);
             }
-            catch (UnicidadeException ex)
+            catch (UnicidadeExcecao ex)
             {
                 notificacao.AddNotificacao(ex.Message, "Pessoa com mesmo cpf já cadastrada");
                 return CriacaoResultado.Retorno(null);

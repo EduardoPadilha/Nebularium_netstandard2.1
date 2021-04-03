@@ -1,10 +1,9 @@
 ﻿using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Drone.Entidades;
-using Nebularium.Tellurian.Drone.Interfaces;
+using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 using Nebularium.Tellurian.Recursos;
 using Nebularium.Tiamat.Recursos;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;

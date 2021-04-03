@@ -9,19 +9,21 @@ namespace Nebularium.Tiamat.Recursos
 {
     public class PropriedadeValor
     {
-        public PropriedadeValor(LambdaExpression propriedade, object valor, string nome)
+        public PropriedadeValor(LambdaExpression propriedade, object valor, PropertyInfo info)
         {
             Propriedade = propriedade;
             Valor = valor;
-            Nome = nome;
+            Info = info;
+            Nome = info.Name;
         }
         public static PropriedadeValor Cria<TEntidade, TPropriedade>(Expression<Func<TEntidade, TPropriedade>> propriedade, TPropriedade valor)
         {
             var member = propriedade.ObterMemberInfo();
-            var propInfo = member.Member as PropertyInfo;
-            return new PropriedadeValor(propriedade, valor, propInfo.Name);
+            var info = member.Member as PropertyInfo;
+            return new PropriedadeValor(propriedade, valor, info);
         }
         public string Nome { get; private set; }
+        public PropertyInfo Info { get; private set; }
         public LambdaExpression Propriedade { get; private set; }
         public object Valor { get; private set; }
     }

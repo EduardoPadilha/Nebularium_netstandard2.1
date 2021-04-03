@@ -8,9 +8,11 @@ using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Recursos;
 using Nebularium.Tellurian.Drone.Behemoth.Repositorios;
+using Nebularium.Tellurian.Drone.Comandos;
 using Nebularium.Tellurian.Drone.Eventos;
 using Nebularium.Tellurian.Drone.Features;
-using Nebularium.Tellurian.Drone.Interfaces;
+using Nebularium.Tellurian.Drone.Interfaces.Comandos;
+using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 using Nebularium.Tellurian.Drone.Manipuladores;
 using Nebularium.Tellurian.Recursos;
 using Nebularium.Tiamat.Abstracoes;
@@ -29,6 +31,13 @@ namespace Nebularium.Tellurian.Drone.Recursos
         public static IServiceCollection AddFeatures(this IServiceCollection servicos)
         {
             servicos.AddScoped<ICadastrarPessoa, CadastrarPessoa>();
+
+            return servicos;
+        }
+
+        public static IServiceCollection AddComandos(this IServiceCollection servicos)
+        {
+            servicos.AddScoped<IPessoaComandos, PessoaComandos>();
 
             return servicos;
         }

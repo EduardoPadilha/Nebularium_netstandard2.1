@@ -5,9 +5,10 @@ using Nebularium.Behemoth.Mongo.Repositorios;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tellurian.Drone.Behemoth.Mapeamentos;
 using Nebularium.Tellurian.Drone.Entidades;
-using Nebularium.Tellurian.Drone.Interfaces;
+using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 using Nebularium.Tiamat.Excecoes;
 using Nebularium.Tiamat.Recursos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -35,10 +36,10 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
             var ativosComMesmaChave = await consultaRepositorio.ObterTodosAtivosAsync(c => c.Cpf == entidade.Cpf && c.Id != entidade.Id);
 
             if (ativosComMesmaChave.AnySafe())
-                throw new UnicidadeException(entidade.Cpf);
+                throw new UnicidadeExcecao(entidade.Cpf);
         }
 
-        protected async override Task ValidaUnicidadeAtualizacao(Expression<System.Func<Pessoa, bool>> predicado, List<PropriedadeValor> propriedades)
+        protected async override Task ValidaUnicidadeAtualizacao(Expression<Func<Pessoa, bool>> predicado, List<PropriedadeValor> propriedades)
         {
             if (!propriedades.Any(c => c.Nome == nameof(Pessoa.Cpf))) return;
             var mutaveis = await consultaRepositorio.ObterTodosAtivosAsync(predicado);
@@ -47,14 +48,14 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
             var valor = (string)propriedades.FirstOrDefault(c => c.Nome == nameof(Pessoa.Cpf)).Valor;
 
             if (mutaveis.Count() > 1)
-                throw new UnicidadeException(valor);
+                throw new UnicidadeExcecao(valor);
 
             var comUnicidade = await consultaRepositorio.ObterTodosAtivosAsync(c => c.Cpf == valor);
 
-            if (comUnicidade.Count() > 1) throw new UnicidadeException(valor);
+            if (comUnicidade.Count() > 1) throw new UnicidadeExcecao(valor);
 
             if (comUnicidade.Count() > 0 && !comUnicidade.Any(c => mutaveis.FirstOrDefault().Id == c.Id))
-                throw new UnicidadeException(valor);
+                throw new UnicidadeExcecao(valor);
         }
     }
 }
