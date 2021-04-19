@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Nebularium.Tiamat.Filtros
 {
-    public abstract class FiltroAbstrato<TEntidade> : IFiltro<TEntidade> where TEntidade : IEntidade, new()
+    public abstract class FiltroAbstrato<TEntidade> : IFiltro<TEntidade> where TEntidade : class, new()
     {
         protected readonly Dictionary<string, Expression<Func<TEntidade, bool>>> criterios;
         protected readonly Dictionary<string, Expression<Func<TEntidade, bool>>> condicoes;
@@ -55,7 +55,7 @@ namespace Nebularium.Tiamat.Filtros
             return ExpressoesAtivas;
         }
     }
-    public abstract class FiltroAbstrato<TEntidade, TCriterio> : FiltroAbstrato<TEntidade> where TEntidade : IEntidade, new() where TCriterio : new()
+    public abstract class FiltroAbstrato<TEntidade, TCriterio> : FiltroAbstrato<TEntidade> where TEntidade : class, new() where TCriterio : new()
     {
         public new TCriterio Criterio { get; set; }
         public FiltroAbstrato()

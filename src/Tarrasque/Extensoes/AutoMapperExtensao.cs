@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Nebularium.Tarrasque.Recursos;
 using System;
+using System.Linq.Expressions;
 
 namespace Nebularium.Tarrasque.Extensoes
 {
@@ -38,6 +39,15 @@ namespace Nebularium.Tarrasque.Extensoes
             var dic = EscanerTipos.EscanearImplementacoesInterfacesNoAssembly(tipo, tipoNoAssemblyAlvo);
             foreach (var mapeamento in dic)
                 profile.CreateMap(mapeamento.Key, mapeamento.Value);
+        }
+
+        public static IMappingExpression<TSource, TDestination> ForMemberMapFrom
+            <TDestination, TDestinationMember, TSource, TSourceMember>(
+            this IMappingExpression<TSource, TDestination> map,
+            Expression<Func<TDestination, TDestinationMember>> destinationMember,
+            Expression<Func<TSource, TSourceMember>> mapExpression)
+        {
+            return map.ForMember(destinationMember, origem => origem.MapFrom(mapExpression));
         }
     }
 }

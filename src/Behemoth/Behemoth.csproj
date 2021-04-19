@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Nebularium.Behemoth</RootNamespace>
+    <Version>0.0.12</Version>
+    <Authors>Eduardo Padilha</Authors>
+    <Company>Deflagra</Company>
+    <Product>Nebularium.Behemoth</Product>
+    <Description>Biblioteca responsável pelas abstrações de persistência no Nebularium.</Description>
+    <PackageId>Nebularium.Behemoth</PackageId>
+    <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+</Project>

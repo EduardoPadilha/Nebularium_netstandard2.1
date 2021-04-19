@@ -8,6 +8,7 @@ using Nebularium.Tiamat.Extensoes;
 using Nebularium.Tiamat.Recursos;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -18,6 +19,7 @@ namespace Nebularium.Tiamat.Validacoes
     {
         protected ValidadorAbstrato(IDisplayNameExtrator displayNameExtrator)
         {
+            ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("pt-BR");
             ValidatorOptions.Global.DisplayNameResolver = (tipo, membro, exp) => displayNameExtrator.ObterDisplay(tipo, membro);
         }
         public Action<List<ErroValidacao>> EventoFalhaValidacao { get; set; }
