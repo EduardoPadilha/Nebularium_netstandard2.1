@@ -2,7 +2,7 @@
 {
     public interface IDbConfiguracao : IConfiguracao
     {
-        string ConnectionString { get; set; }
-        string DatabaseName { get; set; }
+        string StringConexao { get; set; }
+        string NomeBancoDados { get; set; }
     }
 }

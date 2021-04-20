@@ -9,11 +9,11 @@ namespace Nebularium.Behemoth.Mongo.Configuracoes
         public DBConfiguracaoPadrao(IConfiguration configuracao)
         {
             var section = configuracao.GetSection(Secao);
-            ConnectionString = section["ConnectionString"];
-            DatabaseName = section["DatabaseName"];
+            StringConexao = section["ConnectionString"];
+            NomeBancoDados = section["DatabaseName"];
         }
-        public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
+        public string StringConexao { get; set; }
+        public string NomeBancoDados { get; set; }
 
         public virtual string Secao => "DBConfigDefault";
     }

@@ -1,6 +1,4 @@
-﻿using Nebularium.Tarrasque.Extensoes;
-using Nebularium.Tiamat.Abstracoes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Nebularium.Tiamat.Validacoes
@@ -27,7 +25,6 @@ namespace Nebularium.Tiamat.Validacoes
     {
         private readonly List<ValidacaoSimples> validacaoes;
         public Action<List<ValidacaoSimples>> EventoFalhaValidacao { get; set; }
-        public bool TemValidacao => validacaoes.AnySafe();
 
         public ValidadorSimples()
         {
@@ -46,20 +43,14 @@ namespace Nebularium.Tiamat.Validacoes
             return this;
         }
 
-        public ValidadorSimples Add(string campo, string mensagem, Func<bool> validar, bool bloqueante = false, bool notificar = true)
+        public ValidadorSimples Add(string campo, string mensagem, Func<bool> validar, bool bloqueante = false)
         {
             if (!string.IsNullOrEmpty(campo) && !string.IsNullOrEmpty(mensagem) && validar != null)
-                validacaoes.Add(new ValidacaoSimples(campo, mensagem, validar, bloqueante, notificar));
+                validacaoes.Add(new ValidacaoSimples(campo, mensagem, validar, bloqueante));
             return this;
         }
 
-        public ValidadorSimples AddSemNotificacao(Func<bool> validar, bool bloqueante = false)
-        {
-            Add(string.Empty, string.Empty, validar, bloqueante, false);
-            return this;
-        }
-
-        public bool Validar(IContextoNotificacao contextoNotificacao = null)
+        public bool Validar()
         {
             var valido = true;
             var erros = new List<ValidacaoSimples>();
@@ -69,8 +60,6 @@ namespace Nebularium.Tiamat.Validacoes
                 {
                     valido = false;
                     erros.Add(validacao);
-                    if (contextoNotificacao != null && validacao.Notificar)
-                        contextoNotificacao.AddNotificacao(validacao.Campo, validacao.Mensagem);
                     if (validacao.Bloqueante)
                         break;
                 }

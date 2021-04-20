@@ -43,14 +43,14 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                     ConfigurarMapeamentoBsonClassMap();
                 }
 
-                var settings = MongoClientSettings.FromUrl(new MongoUrl(this.mongoConfig.ConnectionString));
+                var settings = MongoClientSettings.FromUrl(new MongoUrl(this.mongoConfig.StringConexao));
 
                 if (ProcoloSsl.HasValue)
                     settings.SslSettings = new SslSettings() { EnabledSslProtocols = ProcoloSsl.Value };
 
                 cliente = new MongoClient(settings);
 
-                database = cliente.GetDatabase(this.mongoConfig.DatabaseName);
+                database = cliente.GetDatabase(this.mongoConfig.NomeBancoDados);
             }
             catch (Exception ex)
             {

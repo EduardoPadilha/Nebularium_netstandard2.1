@@ -19,8 +19,8 @@ namespace Nebularium.Tellurian.Tarrasque
         {
             var dbConfig = gestorConfiguracao.ObterConfiguracao<DBConfiguracaoPadrao>();
             Assert.NotNull(dbConfig);
-            Assert.Equal("mongodb://localhost:27017", dbConfig.ConnectionString);
-            Assert.Equal("ErpPdv", dbConfig.DatabaseName);
+            Assert.Equal("mongodb://localhost:27017", dbConfig.StringConexao);
+            Assert.Equal("ErpPdv", dbConfig.NomeBancoDados);
         }
     }
 }
