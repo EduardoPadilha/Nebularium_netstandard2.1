@@ -11,6 +11,7 @@ using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Entidades;
 using System;
+using System.Security.Authentication;
 
 namespace Nebularium.Behemoth.Mongo.Contextos
 {
@@ -42,7 +43,12 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                     ConfigurarMapeamentoBsonClassMap();
                 }
 
-                cliente = new MongoClient(this.mongoConfig.ConnectionString);
+                var settings = MongoClientSettings.FromUrl(new MongoUrl(this.mongoConfig.ConnectionString));
+
+                if (ProcoloSsl.HasValue)
+                    settings.SslSettings = new SslSettings() { EnabledSslProtocols = ProcoloSsl.Value };
+
+                cliente = new MongoClient(settings);
 
                 database = cliente.GetDatabase(this.mongoConfig.DatabaseName);
             }
@@ -61,7 +67,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
         {
             return database.GetCollection<T>(nomeColecao);
         }
-
+        public virtual SslProtocols? ProcoloSsl => null;
         public abstract bool UsarMapeamentoBsonClassMap { get; }
         public abstract void ConfigurarMapeamentoBsonClassMap();
 
