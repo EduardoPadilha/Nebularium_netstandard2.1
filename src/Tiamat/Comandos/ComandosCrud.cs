@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Nebularium.Tiamat.Abstracoes;
-using Nebularium.Tiamat.Atributos;
 using Nebularium.Tiamat.Comandos;
 using Nebularium.Tiamat.Entidades;
 using Nebularium.Tiamat.Extensoes;
@@ -28,36 +27,35 @@ namespace Noctua.Dominio.Features
 
         public Task AdicionarUmAsync(TEntidade entidade)
         {
-            Validar(nameof(ComandosCrud<TEntidade>.AdicionarUmAsync), entidade);
+            //Validar(nameof(ComandosCrud<TEntidade>.AdicionarUmAsync), entidade);
             return repositorio.AdicionarAsync(entidade);
         }
 
         public Task AdicionarMuitosAsync(IEnumerable<TEntidade> entidades)
         {
-            foreach (var entidade in entidades)
-                Validar(nameof(ComandosCrud<TEntidade>.AdicionarMuitosAsync), entidade);
-            return repositorio.AdicionarAsync(entidades);
+            //foreach (var entidade in entidades)
+                //Validar(nameof(ComandosCrud<TEntidade>.AdicionarMuitosAsync), entidade);
+                return repositorio.AdicionarAsync(entidades);
         }
 
         public Task<bool> AtualizarUmAsync(Expression<Func<TEntidade, bool>> predicado, List<PropriedadeValor> propriedades)
         {
             var entidade = propriedades.ParaEntidade<TEntidade>();
-            Validar(nameof(ComandosCrud<TEntidade>.AtualizarUmAsync), entidade);
+            //Validar(nameof(ComandosCrud<TEntidade>.AtualizarUmAsync), entidade);
             return repositorio.AtualizarUmAsync(predicado, propriedades);
         }
 
         public Task<bool> AtualizarMuitosAsync(Expression<Func<TEntidade, bool>> predicado, List<PropriedadeValor> propriedades)
         {
             var entidade = propriedades.ParaEntidade<TEntidade>();
-            Validar(nameof(ComandosCrud<TEntidade>.AtualizarMuitosAsync), entidade);
+            //Validar(nameof(ComandosCrud<TEntidade>.AtualizarMuitosAsync), entidade);
             return repositorio.AtualizarMuitosAsync(predicado, propriedades);
         }
 
-        [ValidacaoSimples]
         public Task<bool> RemoverUmAsync(string id)
         {
             validadorSimples.Add(ValidadoresSimples.Id(id));
-            Validar(nameof(ComandosCrud<TEntidade>.RemoverUmAsync), null);
+            //Validar(nameof(ComandosCrud<TEntidade>.RemoverUmAsync), null);
             return repositorio.RemoverUmAsync(id);
         }
 
@@ -66,19 +64,17 @@ namespace Noctua.Dominio.Features
             return repositorio.RemoverMuitosAsync(predicado);
         }
 
-        [ValidacaoSimples]
         public Task<bool> AtivarUmAsync(string id)
         {
             validadorSimples.Add(ValidadoresSimples.Id(id));
-            Validar(nameof(ComandosCrud<TEntidade>.AtivarUmAsync), null);
+            //Validar(nameof(ComandosCrud<TEntidade>.AtivarUmAsync), null);
             return repositorio.AtivarDesativarUmAsync(id, true);
         }
 
-        [ValidacaoSimples]
         public Task<bool> DesativarUmAsync(string id)
         {
             validadorSimples.Add(ValidadoresSimples.Id(id));
-            Validar(nameof(ComandosCrud<TEntidade>.DesativarUmAsync), null);
+            //Validar(nameof(ComandosCrud<TEntidade>.DesativarUmAsync), null);
             return repositorio.AtivarDesativarUmAsync(id, false);
         }
     }

@@ -108,11 +108,7 @@ namespace Nebularium.Tiamat.Entidades.Resultados
         public static ErroValidacaoResultado Retorno(Dictionary<string, string> erros)
         {
             var paginador = new Paginador { Pagina = 1, TamanhoPagina = erros.Count };
-            var lista = erros.Select(n => new ErroValidacao
-            {
-                NomePropriedade = n.Key,
-                Mensagem = n.Value
-            });
+            var lista = erros.Select(n => new ErroValidacao(n.Key, n.Value));
 
             return new ErroValidacaoResultado(lista.ToList(), paginador);
         }
