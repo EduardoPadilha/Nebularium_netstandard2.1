@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Nebularium.Behemoth.Mongo</RootNamespace>
-    <Version>0.0.14</Version>
+    <Version>0.0.15</Version>
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Behemoth.Mongo</Product>

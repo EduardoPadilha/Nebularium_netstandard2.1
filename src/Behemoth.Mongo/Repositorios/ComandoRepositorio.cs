@@ -79,7 +79,8 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             if (ativar)
                 await ValidaUnicidadeAtivacao(id);
 
-            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar().Add(c => c.Metadado.Ativo, ativar);
+            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
+                .Add(c => c.Metadado.Ativo, ativar, false);
             return await AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
         }
         private async Task ValidaUnicidadeAtivacao(string id)
