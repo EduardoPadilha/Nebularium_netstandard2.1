@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Events;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Behemoth.Mongo.Configuracoes;
 using Nebularium.Behemoth.Mongo.Serializadores;
@@ -47,6 +48,14 @@ namespace Nebularium.Behemoth.Mongo.Contextos
 
                 if (ProcoloSsl.HasValue)
                     settings.SslSettings = new SslSettings() { EnabledSslProtocols = ProcoloSsl.Value };
+
+                settings.ClusterConfigurator = cb =>
+                {
+                    cb.Subscribe<CommandStartedEvent>(e =>
+                    {
+                        Console.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
+                    });
+                };
 
                 cliente = new MongoClient(settings);
 
