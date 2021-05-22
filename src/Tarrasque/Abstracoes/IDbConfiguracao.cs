@@ -4,6 +4,6 @@
     {
         string StringConexao { get; set; }
         string NomeBancoDados { get; set; }
-        string LogLigado { get; set; }
+        bool LogLigado { get; set; }
     }
 }

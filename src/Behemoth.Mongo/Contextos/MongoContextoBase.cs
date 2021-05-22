@@ -49,7 +49,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                 if (ProcoloSsl.HasValue)
                     settings.SslSettings = new SslSettings() { EnabledSslProtocols = ProcoloSsl.Value };
 
-                if (LigarLog(mongoConfig))
+                if (mongoConfig.LogLigado)
                     settings.ClusterConfigurator = cb =>
                     {
                         cb.Subscribe<CommandStartedEvent>(e =>
@@ -66,14 +66,6 @@ namespace Nebularium.Behemoth.Mongo.Contextos
             {
                 throw new Exception("Não foi possível se conectar com o servidor de banco.", ex);
             }
-        }
-
-        private bool LigarLog(IDbConfiguracao mongoConfig)
-        {
-            var config = mongoConfig.LogLigado;
-            if (config.LimpoNuloBranco()) return false;
-
-            return config.Como<bool>();
         }
 
         public virtual IMongoCollection<T> ObterColecao<T>()
