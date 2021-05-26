@@ -49,8 +49,12 @@ namespace Nebularium.Tiamat.Filtros
             foreach (var k in criterios.Keys)
             {
                 if (condicoes.ContainsKey(k))
+                {
                     if (condicoes[k].Compile().Invoke(Criterio))
                         ExpressoesAtivas = ExpressoesAtivas.And(criterios[k]);
+                }
+                else
+                    ExpressoesAtivas = ExpressoesAtivas.And(criterios[k]);
             }
             return ExpressoesAtivas;
         }
