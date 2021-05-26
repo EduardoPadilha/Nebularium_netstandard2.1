@@ -25,6 +25,11 @@ namespace Nebularium.Behemoth.Mongo.Contextos
         public IMongoDatabase OberDataBase => database;
         public IDbConfiguracao ObterConfiguracao => mongoConfig;
 
+        protected virtual MongoClientSettings ConfiguraMongoSettings(MongoClientSettings settings)
+        {
+            return settings;
+        }
+
         protected MongoContextoBase(IDbConfiguracao mongoConfig)
         {
             this.mongoConfig = mongoConfig;
@@ -57,6 +62,8 @@ namespace Nebularium.Behemoth.Mongo.Contextos
                             Console.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
                         });
                     };
+
+                settings = ConfiguraMongoSettings(settings);
 
                 cliente = new MongoClient(settings);
 
