@@ -68,7 +68,7 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void AtualizarUmAsync_test()
         {
-            var pessoaTeste = consultaRepositorio.ObterTodosQueryableAsync(query => query.Where(p => p.NomeSobrenome.Contains("Melissa")).Take(1)).Result.FirstOrDefault();
+            var pessoaTeste = consultaRepositorio.ObterTodosAsync(p => p.NomeSobrenome.Contains("Melissa")).Result.FirstOrDefault();
 
             var listaProps = PropriedadeValorFabrica<Pessoa>.Iniciar()
                                 .Add(c => c.Genero, Genero.Indefinido, false)
@@ -110,7 +110,7 @@ namespace Nebularium.Tellurian.Behemoth
         [Fact]
         public async void DeletarAsync_test()
         {
-            var pessoaTeste = consultaRepositorio.ObterTodosQueryableAsync(query => query.Where(p => p.Id != null)).Result.LastOrDefault();
+            var pessoaTeste = consultaRepositorio.ObterTodosAsync(p => p.Id != null).Result.LastOrDefault();
             Assert.NotNull(pessoaTeste);
             await comandoRepositorio.RemoverUmAsync(pessoaTeste.Id);
 

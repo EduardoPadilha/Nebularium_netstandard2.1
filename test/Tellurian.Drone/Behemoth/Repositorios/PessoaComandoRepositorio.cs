@@ -33,7 +33,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
 
         protected async override Task ValidaUnicidade(Pessoa entidade)
         {
-            var ativosComMesmaChave = await consultaRepositorio.ObterTodosAtivosAsync(c => c.Cpf == entidade.Cpf && c.Id != entidade.Id);
+            var ativosComMesmaChave = await consultaRepositorio.ObterTodosAsync(c => c.Cpf == entidade.Cpf && c.Id != entidade.Id);
 
             if (ativosComMesmaChave.AnySafe())
                 throw new UnicidadeExcecao(entidade.Cpf);
@@ -42,7 +42,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
         protected async override Task ValidaUnicidadeAtualizacao(Expression<Func<Pessoa, bool>> predicado, List<PropriedadeValor> propriedades)
         {
             if (!propriedades.Any(c => c.Nome == nameof(Pessoa.Cpf))) return;
-            var mutaveis = await consultaRepositorio.ObterTodosAtivosAsync(predicado);
+            var mutaveis = await consultaRepositorio.ObterTodosAsync(predicado);
             if (!mutaveis.AnySafe()) return;
 
             var valor = (string)propriedades.FirstOrDefault(c => c.Nome == nameof(Pessoa.Cpf)).Valor;
@@ -50,7 +50,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
             if (mutaveis.Count() > 1)
                 throw new UnicidadeExcecao(valor);
 
-            var comUnicidade = await consultaRepositorio.ObterTodosAtivosAsync(c => c.Cpf == valor);
+            var comUnicidade = await consultaRepositorio.ObterTodosAsync(c => c.Cpf == valor);
 
             if (comUnicidade.Count() > 1) throw new UnicidadeExcecao(valor);
 

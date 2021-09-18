@@ -16,6 +16,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         where TEntidade : IEntidade, new()
         where TProxy : IEntidade, new()
     {
+        //TODO: Deixar classe igual a irma, usando fluenteFilter
         public ConsultaRepositorioBase(IMongoContexto contexto) : base(contexto)
         {
         }

@@ -57,19 +57,6 @@ namespace Nebularium.Tellurian.Behemoth
         }
 
         [Fact]
-        public async void ObterTodosAsync_PorPredicadoIQueryable_test()
-        {
-            Expression<Func<IQueryable<Pessoa>, IQueryable<Pessoa>>> predicado =
-                pessoas => pessoas.Where(pessoa => pessoa.NomeSobrenome.Contains("Pinto") &&
-                                                    pessoa.Genero == Genero.Feminio &&
-                                                    pessoa.Nascimento > new DateTime(1900, 1, 1) && pessoa.Nascimento < new DateTime(1950, 1, 1));
-
-            var todos = await repositorio.ObterTodosQueryableAsync(predicado);
-            Assert.NotNull(todos);
-            Assert.Single(todos);
-        }
-
-        [Fact]
         public async void ObterTodosAsync_Paginado_test()
         {
             var paginador = new Paginador { Pagina = 1 };

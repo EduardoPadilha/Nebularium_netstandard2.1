@@ -8,7 +8,7 @@ using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 
 namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
 {
-    public class PessoaConsultaRepositorio : ConsultaRepositorio<Pessoa, PessoaMapeamento>, IPessoaConsultaRepositorio
+    public class PessoaConsultaRepositorio : ConsultaRepositorioBase<Pessoa, PessoaMapeamento>, IPessoaConsultaRepositorio
     {
         public PessoaConsultaRepositorio(IMongoContexto context) : base(context)
         {
