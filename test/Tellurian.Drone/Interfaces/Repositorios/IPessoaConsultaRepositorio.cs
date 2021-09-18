@@ -3,7 +3,7 @@ using Nebularium.Tiamat.Abstracoes;
 
 namespace Nebularium.Tellurian.Drone.Interfaces.Repositorios
 {
-    public interface IPessoaConsultaRepositorio : IConsultaRepositorio<Pessoa>
+    public interface IPessoaConsultaRepositorio : IConsultaRepositorioBase<Pessoa>
     {
     }
 }

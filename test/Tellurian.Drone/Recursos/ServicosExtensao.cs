@@ -68,7 +68,6 @@ namespace Nebularium.Tellurian.Drone.Recursos
 
             servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorioBase<>), typeof(ServicosExtensao));
             servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorio<>), typeof(ServicosExtensao));
-            servicos.AddScopedTodosPorInterface(typeof(IConsultaRepositorio<>), typeof(ServicosExtensao));
             servicos.AddScopedTodosPorInterface(typeof(IConsultaRepositorioBase<>), typeof(ServicosExtensao));
 
             servicos.AddScoped<IPessoaConsultaRepositorio, PessoaConsultaRepositorio>();

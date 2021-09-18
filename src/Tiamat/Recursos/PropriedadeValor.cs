@@ -48,7 +48,7 @@ namespace Nebularium.Tiamat.Recursos
             return lista.Select(pv => pv.Propriedade).Contains(propriedade);
         }
 
-        public PropriedadeValorFabrica<TEntidade> Add<TPropriedade>(Expression<Func<TEntidade, TPropriedade>> propriedade, TPropriedade valor, bool ignorarNullOuDefault = true)
+        public PropriedadeValorFabrica<TEntidade> Add<TPropriedade>(Expression<Func<TEntidade, TPropriedade>> propriedade, TPropriedade valor, bool ignorarNullOuDefault = false)
         {
             if (ignorarNullOuDefault && (valor == null || valor.Equals(default(TPropriedade)))) return this;
             if (Existe(propriedade)) return this;

@@ -1,12 +1,10 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Nebularium.Behemoth.Mongo.Abstracoes;
-using Nebularium.Behemoth.Mongo.Extensoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tiamat.Abstracoes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -19,10 +17,10 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
         }
 
-        #region Implementação IConsultaRepositorio
+        #region Implementação IConsultaRepositorioBase
         public virtual Task<TEntidade> ObterAsync(string id)
         {
-            return ObterTodos().FirstOrDefaultAsync(c => c.Id == id);
+            return ObterTodos(c => c.Id == id).FirstOrDefaultAsync();
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(IFiltro<TEntidade> filtro, IPaginador paginador = null)
         {
@@ -30,7 +28,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(IFiltro<T> filtro, IPaginador paginador = null)
         {
-            var query = ObterTodos(filtro);
+            var query = ObterFitro(filtro);
             return ProcessarBuscas(query, paginador);
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(Expression<Func<TEntidade, bool>> predicado, IPaginador paginador = null)
@@ -39,49 +37,53 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         }
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync<T>(Expression<Func<T, bool>> predicado, IPaginador paginador = null)
         {
-            var query = ObterTodos().Where(predicado.ConvertePredicado<T, TEntidade>());
-            return ProcessarBuscas(query, paginador);
-        }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAsync(Expression<Func<IQueryable<TEntidade>, IQueryable<TEntidade>>> predicado, IPaginador paginador = null)
-        {
-            return ObterTodosQueryableAsync<TEntidade>(predicado, paginador);
-        }
-        public virtual Task<IEnumerable<TEntidade>> ObterTodosQueryableAsync<T>(Expression<Func<IQueryable<T>, IQueryable<T>>> predicado, IPaginador paginador = null)
-        {
-            var predicadoConvertido = predicado.ConvertePredicado<T, TEntidade>();
-            var query = (IMongoQueryable<TEntidade>)predicadoConvertido.Compile()(ObterTodos());
+            var query = ObterTodos(ConvertePredicadosSeNecessario(predicado));
             return ProcessarBuscas(query, paginador);
         }
         #endregion
 
         #region Implementação de suporte pro repositório
 
-        protected async Task<IEnumerable<TEntidade>> ProcessarBuscas(IMongoQueryable<TEntidade> query, IPaginador paginador)
+        private IFindFluent<TEntidade, TEntidade> Pagina(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
+        {
+            if (paginador.TotalRegistros == 0)
+                return default;
+            return query.Skip((paginador.Pagina - 1) * paginador.TamanhoPagina).Limit(paginador.TamanhoPagina);
+        }
+
+        protected async Task<IEnumerable<TEntidade>> ProcessarBuscas(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
         {
             if (paginador == null)
-                return await query.ToListAsync();
+                return await OrdenacaoPadrao(query).ToListAsync();
 
-            var total = await query.LongCountAsync();
+            var total = await query.CountDocumentsAsync();
 
             paginador.IniciaPaginador(total);
-
-            var queryPaginada = query.Pagina(paginador);
+            var queryOrdenada = OrdenacaoPadrao(query);
+            var queryPaginada = Pagina(queryOrdenada, paginador);
             if (queryPaginada == default)
                 return default;
 
             return await queryPaginada.ToListAsync();
         }
-        public virtual IOrderedMongoQueryable<TEntidade> OrdernarPadrao(IMongoQueryable<TEntidade> query)
+        public virtual IFindFluent<TEntidade, TEntidade> OrdenacaoPadrao(IFindFluent<TEntidade, TEntidade> query)
         {
-            return query.OrderBy(z => z.Id);
+            return query.SortBy(c => c.Id);
         }
-        protected virtual IMongoQueryable<TEntidade> ObterTodos<T>(IFiltro<T> filtro)
+        protected virtual IFindFluent<TEntidade, TEntidade> ObterFitro<T>(IFiltro<T> filtro)
         {
-            return ObterTodos().Where(filtro.ObterPredicados().ConvertePredicado<T, TEntidade>());
+            var predicado = ConvertePredicadosSeNecessario(filtro.ObterPredicados());
+            return ObterTodos(predicado);
         }
-        protected virtual IMongoQueryable<TEntidade> ObterTodos()
+
+        protected virtual IFindFluent<TEntidade, TEntidade> ObterTodos(Expression<Func<TEntidade, bool>> predicado)
         {
-            return OrdernarPadrao(colecao.AsQueryable());
+            return colecao.Find(predicado);
+        }
+
+        protected Expression<Func<TEntidade, bool>> ConvertePredicadosSeNecessario<T>(Expression<Func<T, bool>> predicado)
+        {
+            return typeof(T) == typeof(TEntidade) ? predicado as Expression<Func<TEntidade, bool>> : predicado.ConvertePredicado<T, TEntidade>();
         }
         #endregion
     }
