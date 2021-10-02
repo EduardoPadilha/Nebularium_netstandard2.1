@@ -71,7 +71,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
                 .Add(c => c.Metadado.DataDelecao, DateTimeOffset.UtcNow)
-                .Add(c => c.Metadado.Ativo, false, false);
+                .Add(c => c.Metadado.Ativo, false);
             return base.AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
         }
 
@@ -82,7 +82,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
                 await ValidaUnicidadeAtivacao(id);
 
             var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
-                .Add(c => c.Metadado.Ativo, ativar, false);
+                .Add(c => c.Metadado.Ativo, ativar);
             return await AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
         }
         private async Task ValidaUnicidadeAtivacao(string id)

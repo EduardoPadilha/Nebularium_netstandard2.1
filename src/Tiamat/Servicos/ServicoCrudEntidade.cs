@@ -67,9 +67,13 @@ namespace Nebularium.Tiamat.Servicos
         public virtual Task<bool> RemoverAsync(TEntidade entidade)
         {
             ValidarCampoVazio(nameof(Entidade.Id), entidade.Id);
-            return repositorio.AtivarDesativarUmAsync(entidade.Id, false);
+            return repositorio.RemoverUmAsync(entidade.Id);
+        }
 
-            throw new Exception("Não foi possível deletar. Para mais informações contate o administrador");
+        public Task<bool> AtivarDesativarAsync(TEntidade entidade, bool ativar)
+        {
+            ValidarCampoVazio(nameof(Entidade.Id), entidade.Id);
+            return repositorio.AtivarDesativarUmAsync(entidade.Id, false);
         }
 
         private void ValidarCampoVazio(string nome, string valor)

@@ -10,7 +10,7 @@ namespace Nebularium.Tiamat.Filtros
         }
         public FiltroEntidade(string id) : this()
         {
-            AdicionarRegra(c => c.Id == id).SobCondicional(c => true);
+            AdicionarRegra(c => c.Id == id);
         }
     }
 
@@ -18,11 +18,11 @@ namespace Nebularium.Tiamat.Filtros
     {
         public FiltroEntidadeAtivo() : base()
         {
-            AdicionarRegra(c => c.Metadado.Ativo).SobCondicional(c => true);
+            AdicionarRegra(c => c.Metadado.Ativo);
         }
         public FiltroEntidadeAtivo(string id) : this()
         {
-            AdicionarRegra(c => c.Id == id).SobCondicional(c => true);
+            AdicionarRegra(c => c.Id == id);
         }
     }
 }
