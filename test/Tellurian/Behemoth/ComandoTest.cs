@@ -69,7 +69,7 @@ namespace Nebularium.Tellurian.Behemoth
             var pessoaTeste = repositorio.ObterTodosAsync(p => p.NomeSobrenome.Contains("Melissa")).Result.FirstOrDefault();
 
             var listaProps = PropriedadeValorFabrica<Pessoa>.Iniciar()
-                                .Add(c => c.Genero, Genero.Indefinido, false)
+                                .Add(c => c.Genero, Genero.Indefinido)
                                 .Add(c => c.Enderecos, new List<Endereco> { new Endereco { Cep = 12399, Cidade = "Catitu-mirim", Estado = "PA" } });
             await repositorio.AtualizarUmAsync(c => c.NomeSobrenome.Contains("Melissa"), listaProps.ObterTodos);
 
@@ -83,7 +83,7 @@ namespace Nebularium.Tellurian.Behemoth
         public async void AtualizarMuitosAsync_test()
         {
             var listaProps = PropriedadeValorFabrica<Pessoa>.Iniciar()
-                                        .Add(c => c.Genero, Genero.Indefinido, false)
+                                        .Add(c => c.Genero, Genero.Indefinido)
                                         .Add(c => c.Enderecos, new List<Endereco> { new Endereco { Cep = 11111 } });
             var resultado = await repositorio.AtualizarMuitosAsync(c => c.Genero == Genero.Masculino, listaProps.ObterTodos);
 
