@@ -48,9 +48,9 @@ namespace Nebularium.Tiamat.Features
     public abstract class FeatureConsulta<TEntidade> : FeatureBase
          where TEntidade : IEntidade, new()
     {
-        protected readonly IConsultaRepositorioBase<TEntidade> repositorio;
+        protected readonly IRepositorioEntidadeBase<TEntidade> repositorio;
         protected FeatureConsulta(IContextoNotificacao notificacao,
-            IConsultaRepositorioBase<TEntidade> repositorio) : base(notificacao)
+            IRepositorioEntidadeBase<TEntidade> repositorio) : base(notificacao)
         {
             this.repositorio = repositorio ?? throw new ArgumentException("repositorio");
         }
@@ -63,9 +63,9 @@ namespace Nebularium.Tiamat.Features
     public abstract class FeatureComando<TEntidade> : FeatureBase
          where TEntidade : IEntidade, new()
     {
-        protected readonly IComandoRepositorioBase<TEntidade> repositorio;
+        protected readonly IRepositorioEntidadeBase<TEntidade> repositorio;
         protected FeatureComando(IContextoNotificacao notificacao,
-            IComandoRepositorioBase<TEntidade> repositorio) : base(notificacao)
+            IRepositorioEntidadeBase<TEntidade> repositorio) : base(notificacao)
         {
             this.repositorio = repositorio ?? throw new ArgumentException("repositorio");
         }
@@ -76,9 +76,9 @@ namespace Nebularium.Tiamat.Features
         where TEntidade : IEntidade, new()
     {
 
-        protected readonly IConsultaRepositorioBase<TEntidade> repositorio;
+        protected readonly IRepositorioEntidadeBase<TEntidade> repositorio;
         protected FeatureConsultaValidando(IContextoNotificacao notificacao,
-            IValidador<TInbound> validador, IConsultaRepositorioBase<TEntidade> repositorio) :
+            IValidador<TInbound> validador, IRepositorioEntidadeBase<TEntidade> repositorio) :
             base(notificacao, validador)
         {
             this.repositorio = repositorio ?? throw new ArgumentException("repositorio");
@@ -95,9 +95,9 @@ namespace Nebularium.Tiamat.Features
         where TEntidade : IEntidade, new()
     {
 
-        protected readonly IComandoRepositorioBase<TEntidade> repositorio;
+        protected readonly IRepositorioEntidadeBase<TEntidade> repositorio;
         protected FeatureComandoValidando(IContextoNotificacao notificacao,
-            IValidador<TInbound> validador, IComandoRepositorioBase<TEntidade> repositorio) :
+            IValidador<TInbound> validador, IRepositorioEntidadeBase<TEntidade> repositorio) :
             base(notificacao, validador)
         {
             this.repositorio = repositorio ?? throw new ArgumentException("repositorio");

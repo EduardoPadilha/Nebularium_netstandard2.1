@@ -15,7 +15,7 @@ namespace Nebularium.Tellurian.Drone.Features
     {
         public CadastrarPessoa(IContextoNotificacao notificacao,
             IValidador<Pessoa> validador,
-            IComandoRepositorioBase<Pessoa> repositorio) :
+            IRepositorioEntidadeBase<Pessoa> repositorio) :
             base(notificacao, validador, repositorio)
         {
         }

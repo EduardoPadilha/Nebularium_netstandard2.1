@@ -8,10 +8,8 @@ using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Recursos;
 using Nebularium.Tellurian.Drone.Behemoth.Repositorios;
-using Nebularium.Tellurian.Drone.Comandos;
 using Nebularium.Tellurian.Drone.Eventos;
 using Nebularium.Tellurian.Drone.Features;
-using Nebularium.Tellurian.Drone.Interfaces.Comandos;
 using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 using Nebularium.Tellurian.Drone.Manipuladores;
 using Nebularium.Tellurian.Recursos;
@@ -31,13 +29,6 @@ namespace Nebularium.Tellurian.Drone.Recursos
         public static IServiceCollection AddFeatures(this IServiceCollection servicos)
         {
             servicos.AddScoped<ICadastrarPessoa, CadastrarPessoa>();
-
-            return servicos;
-        }
-
-        public static IServiceCollection AddComandos(this IServiceCollection servicos)
-        {
-            servicos.AddScoped<IPessoaComandos, PessoaComandos>();
 
             return servicos;
         }
@@ -66,12 +57,10 @@ namespace Nebularium.Tellurian.Drone.Recursos
             servicos.AddSingleton<IDbConfiguracao, DBConfiguracaoPadrao>();
             servicos.AddSingleton<IMongoContexto, TellurianContext>();
 
-            servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorioBase<>), typeof(ServicosExtensao));
-            servicos.AddScopedTodosPorInterface(typeof(IComandoRepositorio<>), typeof(ServicosExtensao));
-            servicos.AddScopedTodosPorInterface(typeof(IConsultaRepositorioBase<>), typeof(ServicosExtensao));
+            servicos.AddScopedTodosPorInterface(typeof(IRepositorioEntidadeBase<>), typeof(ServicosExtensao));
+            servicos.AddScopedTodosPorInterface(typeof(IRepositorioEntidade<>), typeof(ServicosExtensao));
 
-            servicos.AddScoped<IPessoaConsultaRepositorio, PessoaConsultaRepositorio>();
-            servicos.AddScoped<IPessoaComandoRepositorio, PessoaComandoRepositorio>();
+            servicos.AddScoped<IPessoaRepositorio, PessoaRepositorio>();
 
             return servicos;
         }

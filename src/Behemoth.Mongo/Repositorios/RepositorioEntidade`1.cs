@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ComandoRepositorio<TEntidade, TProxy> : ComandoRepositorioBase<TEntidade, TProxy>,
-        IComandoRepositorio<TEntidade>
-        where TEntidade : Entidade, new()
+    public abstract class RepositorioEntidade<TEntidade, TProxy> : RepositorioEntidadeBase<TEntidade, TProxy>,
+       IRepositorioEntidade<TEntidade>
+       where TEntidade : Entidade, new()
         where TProxy : EntidadeMapeamento, new()
     {
-        protected ComandoRepositorio(IMongoContexto contexto, ILogger<TEntidade> logger) : base(contexto, logger)
+        protected RepositorioEntidade(IMongoContexto contexto, ILogger<RepositorioEntidadeBase<TEntidade, TProxy>> logger) : base(contexto, logger)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             foreach (var entidade in entidades)
             {
                 await ValidaUnicidade(entidade);
-                entidade.Cria();
+                entidade.Metadado.Criar();
             }
 
             await base.AdicionarAsync(entidades);
@@ -37,7 +37,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             await ValidaUnicidade(entidade);
 
-            entidade.Cria();
+            entidade.Metadado.Criar();
 
             await base.AdicionarAsync(entidade);
         }
@@ -81,7 +81,8 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             if (ativar)
                 await ValidaUnicidadeAtivacao(id);
 
-            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar().Add(c => c.Metadado.Ativo, ativar);
+            var propriedades = PropriedadeValorFabrica<TEntidade>.Iniciar()
+                .Add(c => c.Metadado.Ativo, ativar, false);
             return await AtualizarUmAsync(c => c.Id == id, propriedades.ObterTodos);
         }
         private async Task ValidaUnicidadeAtivacao(string id)

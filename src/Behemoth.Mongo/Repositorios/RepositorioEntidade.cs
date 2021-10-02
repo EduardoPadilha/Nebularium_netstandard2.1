@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Mongo.Repositorios
 {
-    public abstract class ComandoRepositorio<TEntidade> : ComandoRepositorioBase<TEntidade>,
-       IComandoRepositorio<TEntidade>
+    public abstract class RepositorioEntidade<TEntidade> : RepositorioEntidadeBase<TEntidade>,
+       IRepositorioEntidade<TEntidade>
        where TEntidade : Entidade, new()
     {
-        protected ComandoRepositorio(IMongoContexto contexto, ILogger<TEntidade> logger) : base(contexto, logger)
+        protected RepositorioEntidade(IMongoContexto contexto, ILogger<RepositorioEntidadeBase<TEntidade>> logger) : base(contexto, logger)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
             foreach (var entidade in entidades)
             {
                 await ValidaUnicidade(entidade);
-                entidade.Cria();
+                entidade.Metadado.Criar();
             }
 
             await base.AdicionarAsync(entidades);
@@ -35,7 +35,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
         {
             await ValidaUnicidade(entidade);
 
-            entidade.Cria();
+            entidade.Metadado.Criar();
 
             await base.AdicionarAsync(entidade);
         }
