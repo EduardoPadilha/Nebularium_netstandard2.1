@@ -23,5 +23,28 @@ namespace Nebularium.Tiamat.Entidades
                 return Ativo ? SituacaoEntidade.Ativo : SituacaoEntidade.Inativo;
             }
         }
+
+        public void Criar()
+        {
+            Ativo = true;
+            DataCriacao = DateTimeOffset.UtcNow;
+        }
+
+        public void Atualizar()
+        {
+            DataAtualizacao = DateTimeOffset.UtcNow;
+        }
+
+        public void Deletar()
+        {
+            Ativo = false;
+            DataDelecao = DateTimeOffset.UtcNow;
+        }
+
+        public void AtivarDesativar(bool ativar)
+        {
+            DataAtualizacao = DateTimeOffset.UtcNow;
+            Ativo = ativar;
+        }
     }
 }

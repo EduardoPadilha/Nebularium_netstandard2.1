@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Behemoth.Mongo.Repositorios;
 using Nebularium.Tarrasque.Extensoes;
@@ -16,13 +17,19 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
 {
-    public class PessoaComandoRepositorio : ComandoRepositorio<Pessoa, PessoaMapeamento>, IPessoaComandoRepositorio
+    public class PessoaRepositorio : RepositorioEntidade<Pessoa, PessoaMapeamento>, IPessoaRepositorio
     {
-        private readonly IPessoaConsultaRepositorio consultaRepositorio;
-        public PessoaComandoRepositorio(IMongoContexto context, ILogger<Pessoa> logger, IPessoaConsultaRepositorio consultaRepositorio) : base(context, logger)
+        public PessoaRepositorio(IMongoContexto context, ILogger<PessoaRepositorio> logger) : base(context, logger)
         {
-            this.consultaRepositorio = consultaRepositorio;
         }
+
+        public override IOrderedMongoQueryable<PessoaMapeamento> OrdernarPadrao(IMongoQueryable<PessoaMapeamento> query)
+        {
+            return query.OrderBy(c => c.Nascimento);
+        }
+
+        protected override string NomeColecao => typeof(Pessoa).Name.SnakeCase();
+
         public async Task AtualizarNaMao()
         {
             var builder = Builders<PessoaMapeamento>.Update
@@ -33,7 +40,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
 
         protected async override Task ValidaUnicidade(Pessoa entidade)
         {
-            var ativosComMesmaChave = await consultaRepositorio.ObterTodosAsync(c => c.Cpf == entidade.Cpf && c.Id != entidade.Id);
+            var ativosComMesmaChave = await ObterTodosAsync(c => c.Cpf == entidade.Cpf && c.Id != entidade.Id);
 
             if (ativosComMesmaChave.AnySafe())
                 throw new UnicidadeExcecao(entidade.Cpf);
@@ -42,7 +49,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
         protected async override Task ValidaUnicidadeAtualizacao(Expression<Func<Pessoa, bool>> predicado, List<PropriedadeValor> propriedades)
         {
             if (!propriedades.Any(c => c.Nome == nameof(Pessoa.Cpf))) return;
-            var mutaveis = await consultaRepositorio.ObterTodosAsync(predicado);
+            var mutaveis = await ObterTodosAsync(predicado);
             if (!mutaveis.AnySafe()) return;
 
             var valor = (string)propriedades.FirstOrDefault(c => c.Nome == nameof(Pessoa.Cpf)).Valor;
@@ -50,7 +57,7 @@ namespace Nebularium.Tellurian.Drone.Behemoth.Repositorios
             if (mutaveis.Count() > 1)
                 throw new UnicidadeExcecao(valor);
 
-            var comUnicidade = await consultaRepositorio.ObterTodosAsync(c => c.Cpf == valor);
+            var comUnicidade = await ObterTodosAsync(c => c.Cpf == valor);
 
             if (comUnicidade.Count() > 1) throw new UnicidadeExcecao(valor);
 

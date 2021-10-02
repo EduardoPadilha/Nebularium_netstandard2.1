@@ -2,23 +2,22 @@
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Drone.Entidades;
 using Nebularium.Tellurian.Drone.Filtros;
+using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 using Nebularium.Tellurian.Recursos;
+using Nebularium.Tiamat.Recursos;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 using Xunit.Abstractions;
-using Nebularium.Tiamat.Recursos;
-using Nebularium.Tellurian.Drone.Interfaces.Repositorios;
 
 namespace Nebularium.Tellurian.Behemoth
 {
     public class ConsultaTest : TesteBase
     {
-        private readonly IPessoaConsultaRepositorio repositorio;
+        private readonly IPessoaRepositorio repositorio;
         public ConsultaTest(ITestOutputHelper saida) : base(saida)
         {
-            repositorio = GestorDependencia.Instancia.ObterInstancia<IPessoaConsultaRepositorio>();
+            repositorio = GestorDependencia.Instancia.ObterInstancia<IPessoaRepositorio>();
         }
 
         [Fact]

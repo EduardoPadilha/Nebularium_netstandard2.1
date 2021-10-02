@@ -13,19 +13,16 @@ namespace Nebularium.Tiamat.Servicos
 {
     public abstract class ServicoCrudEntidade<TEntidade> : IServicoCrudEntidade<TEntidade> where TEntidade : Entidade, new()
     {
-        protected readonly IComandoRepositorio<TEntidade> comandoRepositorio;
-        protected readonly IConsultaRepositorioBase<TEntidade> consultaRepositorio;
+        protected readonly IRepositorioEntidade<TEntidade> repositorio;
         protected readonly ILogger<TEntidade> log;
         protected readonly ValidadorSimples validadorSimples;
         protected readonly IValidador<TEntidade> validador;
 
-        protected ServicoCrudEntidade(IComandoRepositorio<TEntidade> comandoRepositorio,
-            IConsultaRepositorioBase<TEntidade> consultaRepositorio,
+        protected ServicoCrudEntidade(IRepositorioEntidade<TEntidade> comandoRepositorio,
             ILogger<TEntidade> log,
             IValidador<TEntidade> validador)
         {
-            this.comandoRepositorio = comandoRepositorio;
-            this.consultaRepositorio = consultaRepositorio;
+            this.repositorio = comandoRepositorio;
             this.log = log;
             validadorSimples = new ValidadorSimples
             {
@@ -42,20 +39,20 @@ namespace Nebularium.Tiamat.Servicos
         public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(IFiltro<TEntidade> filtro, IPaginacao paginacao = null)
         {
             var paginador = paginacao?.Como<Paginador>();
-            return consultaRepositorio.ObterTodosAsync(filtro, paginador);
+            return repositorio.ObterTodosAsync(filtro, paginador);
         }
 
         public virtual async Task<TEntidade> ObterAsync(string id)
         {
             ValidarCampoVazio(nameof(Entidade.Id), id);
-            var resultado = await consultaRepositorio.ObterAsync(id);
+            var resultado = await repositorio.ObterAsync(id);
             return resultado ?? throw new RecursoNaoEncontradoExcecao("Registro não encontrado");
         }
 
         public virtual async Task<TEntidade> AdicionarAsync(TEntidade entidade)
         {
             validador.Validar(entidade, AdicionarRulerset);
-            await comandoRepositorio.AdicionarAsync(entidade);
+            await repositorio.AdicionarAsync(entidade);
             return entidade;
         }
 
@@ -64,13 +61,13 @@ namespace Nebularium.Tiamat.Servicos
             validador.Validar(entidade, AtualizarRulerset);
 
             var atualizacoes = ConfigurarAtualizacoes(entidade);
-            return comandoRepositorio.AtualizarUmAsync(t => t.Id == entidade.Id, atualizacoes);
+            return repositorio.AtualizarUmAsync(t => t.Id == entidade.Id, atualizacoes);
         }
 
         public virtual Task<bool> RemoverAsync(TEntidade entidade)
         {
             ValidarCampoVazio(nameof(Entidade.Id), entidade.Id);
-            return comandoRepositorio.AtivarDesativarUmAsync(entidade.Id, false);
+            return repositorio.AtivarDesativarUmAsync(entidade.Id, false);
 
             throw new Exception("Não foi possível deletar. Para mais informações contate o administrador");
         }

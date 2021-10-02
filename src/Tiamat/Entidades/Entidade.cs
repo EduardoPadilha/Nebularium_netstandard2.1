@@ -37,12 +37,6 @@ namespace Nebularium.Tiamat.Entidades
 
         #endregion
 
-        public void Cria()
-        {
-            Metadado.Ativo = true;
-            Metadado.DataCriacao = DateTimeOffset.UtcNow;
-        }
-
         //public static bool operator ==(Entidade lhs, Entidade rhs)
         //{
         //    if (Object.ReferenceEquals(lhs, null))
