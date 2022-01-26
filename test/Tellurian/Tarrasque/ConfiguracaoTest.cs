@@ -1,4 +1,4 @@
-﻿using Nebularium.Behemoth.Mongo.Configuracoes;
+﻿using Nebularium.Behemoth.Configuracoes;
 using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Gestores;
 using Nebularium.Tellurian.Recursos;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Nebularium.Tarrasque.Abstracoes;
 
-namespace Nebularium.Behemoth.Mongo.Configuracoes
+namespace Nebularium.Behemoth.Configuracoes
 {
     public class DBConfiguracaoPadrao : IDbConfiguracao
     {

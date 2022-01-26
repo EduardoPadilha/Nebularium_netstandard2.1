@@ -1,4 +1,4 @@
-﻿using Nebularium.Behemoth.Mongo.Configuracoes;
+﻿using Nebularium.Behemoth.Atributos;
 using Nebularium.Behemoth.Mongo.Mapeamento;
 using Nebularium.Tellurian.Drone.Entidades;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Nebularium.Tellurian.Drone.Behemoth.Mapeamentos
 {
-    [NomeColecao("PessoasTeste")]
+    [Nome("PessoasTeste")]
     public class PessoaMapeamento : EntidadeMapeamento
     {
         public string NomeSobrenome { get; set; }

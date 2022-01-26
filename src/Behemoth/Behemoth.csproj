@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Nebularium.Behemoth</RootNamespace>
-    <Version>0.0.16</Version>
+    <Version>0.0.17</Version>
     <Authors>Eduardo Padilha</Authors>
     <Company>Deflagra</Company>
     <Product>Nebularium.Behemoth</Product>
@@ -12,5 +12,9 @@
     <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tarrasque\Tarrasque.csproj" />
+  </ItemGroup>
 
 </Project>
