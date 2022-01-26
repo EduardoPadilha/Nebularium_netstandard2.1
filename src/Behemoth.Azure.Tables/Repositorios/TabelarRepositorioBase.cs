@@ -20,6 +20,6 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             tabela = tarefa.Result;
         }
 
-        protected virtual string NomeTabela => typeof(TEntidade).Name.SnakeCase();
+        protected virtual string NomeTabela => null;
     }
 }

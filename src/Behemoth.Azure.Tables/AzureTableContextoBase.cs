@@ -36,7 +36,7 @@ namespace Nebularium.Behemoth.Azure.Tables
         public Task<CloudTable> ObterTabela<T>()
         {
             var nome = typeof(T).ObterAnotacao<NomeAttribute>()?.Nome;
-            return ObterTabela<T>(nome.LimpoNuloBranco() ? typeof(T).Name : nome);
+            return ObterTabela<T>(nome.LimpoNuloBranco() ? typeof(T).Name.SnakeCase() : nome);
         }
 
         public Task<CloudTable> ObterTabela<T>(string nomeTabela)
