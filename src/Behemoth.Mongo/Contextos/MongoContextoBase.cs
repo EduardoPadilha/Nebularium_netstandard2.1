@@ -5,8 +5,8 @@ using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Events;
+using Nebularium.Behemoth.Atributos;
 using Nebularium.Behemoth.Mongo.Abstracoes;
-using Nebularium.Behemoth.Mongo.Configuracoes;
 using Nebularium.Behemoth.Mongo.Serializadores;
 using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
@@ -77,7 +77,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
 
         public virtual IMongoCollection<T> ObterColecao<T>()
         {
-            var nome = typeof(T).ObterAnotacao<NomeColecaoAttribute>()?.Nome;
+            var nome = typeof(T).ObterAnotacao<NomeAttribute>()?.Nome;
             return ObterColecao<T>(nome.LimpoNuloBranco() ? typeof(T).Name : nome);
         }
 
