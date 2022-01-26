@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Nebularium.Behemoth.Azure.Tables.Repositorios
 {
     public abstract class TabelarRepositorio<TEntidade, TProxy> :
-        TabelarRepositorioBase<TEntidade>,
+        TabelarRepositorioBase<TProxy>,
         ITabelarRepositorio<TEntidade>
         where TProxy : ITableEntity, new()
     {

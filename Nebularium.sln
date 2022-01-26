@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consumidor", "test\Consumid
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Behemoth", "src\Behemoth\Behemoth.csproj", "{CB40DA5C-2955-44E1-BB5D-7E9CFF97BD69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Behemoth.Azure.Tables", "src\Behemoth.Azure.Tables\Behemoth.Azure.Tables.csproj", "{D4297F8E-9565-4401-9592-A637FA4BCC7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Behemoth.Azure.Tables", "src\Behemoth.Azure.Tables\Behemoth.Azure.Tables.csproj", "{D4297F8E-9565-4401-9592-A637FA4BCC7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cthulhu", "src\Cthulhu\Cthulhu.csproj", "{EEF67566-CDF4-4DD7-AA32-15417E309604}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{D4297F8E-9565-4401-9592-A637FA4BCC7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4297F8E-9565-4401-9592-A637FA4BCC7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4297F8E-9565-4401-9592-A637FA4BCC7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF67566-CDF4-4DD7-AA32-15417E309604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF67566-CDF4-4DD7-AA32-15417E309604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF67566-CDF4-4DD7-AA32-15417E309604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF67566-CDF4-4DD7-AA32-15417E309604}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{00BBF78F-A8DC-49BD-A62B-E802E4B21D2A} = {867C2AB0-3197-44E8-ABDA-8CE014224ABE}
 		{CB40DA5C-2955-44E1-BB5D-7E9CFF97BD69} = {118FCCDB-4169-4E14-9CF3-D68070E3C585}
 		{D4297F8E-9565-4401-9592-A637FA4BCC7F} = {118FCCDB-4169-4E14-9CF3-D68070E3C585}
+		{EEF67566-CDF4-4DD7-AA32-15417E309604} = {118FCCDB-4169-4E14-9CF3-D68070E3C585}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BD9E39E-5E1B-4AED-9CBC-1D6CB96E969A}
