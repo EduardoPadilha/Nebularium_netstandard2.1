@@ -26,45 +26,31 @@ namespace Nebularium.Cthulhu.Abstracoes
             this.servico = servico;
         }
 
+        #region Abstratos
         protected abstract TEntidade PreencheChaveParticao(TEntidade entidade, string chaveParticao);
         protected abstract TEntidade PreencheChaveLinha(TEntidade entidade, string chaveLinha);
-        private TEntidade PreencheChaves(TEntidade entidade, string chaveParticao, string chaveLinha)
-        {
-            PreencheChaveParticao(entidade, chaveParticao);
-            PreencheChaveLinha(entidade, chaveLinha);
-            return entidade;
-        }
+        #endregion
 
-        public virtual Task<IActionResult> EntradaCrud(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
+        public virtual Task<IActionResult> EntradaCrudAsync(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
         {
             var verbo = Enum.Parse<VerboHTTP>(req.Method);
             switch (verbo)
             {
                 case VerboHTTP.GET:
                     var todos = chaveLinha.limpoNuloBrancoOuZero();
-                    return todos ? ObterTodos(req, log, chaveParticao) : ObterPorId(log, chaveParticao, chaveLinha);
+                    return todos ? ObterTodosAsync(req, log, chaveParticao) : ObterPorIdAsync(log, chaveParticao, chaveLinha);
                 case VerboHTTP.POST:
-                    return Adicionar(req, log, chaveParticao);
+                    return AdicionarAsync(req, log, chaveParticao);
                 case VerboHTTP.PUT:
-                    return Atualizar(req, log, chaveParticao, chaveLinha);
+                    return AtualizarAsync(req, log, chaveParticao, chaveLinha);
                 case VerboHTTP.DELETE:
-                    return Deletar(log, chaveParticao, chaveLinha);
+                    return DeletarAsync(log, chaveParticao, chaveLinha);
                 default:
                     return Task.FromResult(RetornaFalha(log, "O recurso que você procura não existe"));
             }
         }
 
-        protected IPaginacao CriarPaginacao(HttpRequest req)
-        {
-            var pagina = req.Query.Obter<int>("pagina");
-            var tamanhoPagina = req.Query.Obter<int>("tamanho");
-
-            if (tamanhoPagina.NuloOuDefault() || pagina.NuloOuDefault()) return null;
-
-            return new Paginacao { Pagina = pagina, TamanhoPagina = tamanhoPagina };
-        }
-
-        public virtual async Task<IActionResult> ObterTodos(HttpRequest req, ILogger log, string chaveParticao)
+        public virtual async Task<IActionResult> ObterTodosAsync(HttpRequest req, ILogger log, string chaveParticao)
         {
             try
             {
@@ -82,7 +68,7 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public virtual async Task<IActionResult> ObterPorId(ILogger log, string chaveParticao, string chaveLinha)
+        public virtual async Task<IActionResult> ObterPorIdAsync(ILogger log, string chaveParticao, string chaveLinha)
         {
             try
             {
@@ -102,7 +88,7 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public async Task<IActionResult> Adicionar(HttpRequest req, ILogger log, string chaveParticao)
+        public virtual async Task<IActionResult> AdicionarAsync(HttpRequest req, ILogger log, string chaveParticao)
         {
             var content = await new StreamReader(req.Body).ReadToEndAsync();
             try
@@ -120,7 +106,7 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public async Task<IActionResult> Atualizar(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
+        public virtual async Task<IActionResult> AtualizarAsync(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
         {
             var content = await new StreamReader(req.Body).ReadToEndAsync();
             try
@@ -138,7 +124,7 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public virtual async Task<IActionResult> Deletar(ILogger log, string chaveParticao, string chaveLinha)
+        public virtual async Task<IActionResult> DeletarAsync(ILogger log, string chaveParticao, string chaveLinha)
         {
             try
             {
@@ -172,6 +158,24 @@ namespace Nebularium.Cthulhu.Abstracoes
             throw new Exception("Não foi possível atualizar o registro, contate o administrador");
         }
 
+        #region Metodos de suporte
+        protected IPaginacao CriarPaginacao(HttpRequest req)
+        {
+            var pagina = req.Query.Obter<int>("pagina");
+            var tamanhoPagina = req.Query.Obter<int>("tamanho");
+
+            if (tamanhoPagina.NuloOuDefault() || pagina.NuloOuDefault()) return null;
+
+            return new Paginacao { Pagina = pagina, TamanhoPagina = tamanhoPagina };
+        }
+
+        private TEntidade PreencheChaves(TEntidade entidade, string chaveParticao, string chaveLinha)
+        {
+            PreencheChaveParticao(entidade, chaveParticao);
+            PreencheChaveLinha(entidade, chaveLinha);
+            return entidade;
+        }
+
         protected virtual IActionResult RetornaFalha(ILogger log, string mensagem)
         {
             log.LogError(mensagem);
@@ -182,5 +186,9 @@ namespace Nebularium.Cthulhu.Abstracoes
         {
             return new OkObjectResult(resultado.Como<T>());
         }
+
+        #endregion
+
+
     }
 }

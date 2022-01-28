@@ -8,7 +8,7 @@ namespace Nebularium.Tiamat.Servicos
 {
     public abstract class TabelarServico<TEntidade> : ITabelarServico<TEntidade>
     {
-        private readonly ITabelarRepositorio<TEntidade> repositorio;
+        protected readonly ITabelarRepositorio<TEntidade> repositorio;
 
         protected TabelarServico(ITabelarRepositorio<TEntidade> repositorio)
         {
