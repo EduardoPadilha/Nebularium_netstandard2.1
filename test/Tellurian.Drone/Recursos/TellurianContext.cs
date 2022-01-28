@@ -1,5 +1,5 @@
-﻿using Nebularium.Behemoth.Mongo.Contextos;
-using Nebularium.Tarrasque.Abstracoes;
+﻿using Nebularium.Behemoth.Abstracoes;
+using Nebularium.Behemoth.Mongo.Contextos;
 
 namespace Nebularium.Tellurian.Recursos
 {

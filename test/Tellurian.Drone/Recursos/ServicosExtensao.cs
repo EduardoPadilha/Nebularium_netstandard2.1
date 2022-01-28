@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Nebularium.Behemoth.Abstracoes;
 using Nebularium.Behemoth.Configuracoes;
 using Nebularium.Behemoth.Mongo.Abstracoes;
 using Nebularium.Tarrasque.Abstracoes;

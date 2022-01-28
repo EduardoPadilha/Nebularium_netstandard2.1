@@ -1,4 +1,6 @@
-﻿namespace Nebularium.Tarrasque.Abstracoes
+﻿using Nebularium.Tarrasque.Abstracoes;
+
+namespace Nebularium.Behemoth.Abstracoes
 {
     public interface IDbConfiguracao : IConfiguracao
     {

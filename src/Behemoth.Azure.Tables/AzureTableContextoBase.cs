@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using Nebularium.Behemoth.Abstracoes;
 using Nebularium.Behemoth.Atributos;
 using Nebularium.Behemoth.Azure.Tables.Abstracoes;
-using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Extensoes;
 using System;
 using System.Threading.Tasks;

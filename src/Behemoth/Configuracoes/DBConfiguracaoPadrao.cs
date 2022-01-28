@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Nebularium.Tarrasque.Abstracoes;
+using Nebularium.Behemoth.Abstracoes;
 
 namespace Nebularium.Behemoth.Configuracoes
 {

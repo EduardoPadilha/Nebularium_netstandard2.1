@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using Nebularium.Tarrasque.Abstracoes;
-using Nebularium.Tiamat.Abstracoes;
+using Nebularium.Behemoth.Abstracoes;
 using System.Threading.Tasks;
 
 namespace Nebularium.Behemoth.Azure.Tables.Abstracoes

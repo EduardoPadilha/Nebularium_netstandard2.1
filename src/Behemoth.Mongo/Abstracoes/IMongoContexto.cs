@@ -1,6 +1,5 @@
 ﻿using MongoDB.Driver;
-using Nebularium.Tarrasque.Abstracoes;
-using Nebularium.Tiamat.Abstracoes;
+using Nebularium.Behemoth.Abstracoes;
 
 namespace Nebularium.Behemoth.Mongo.Abstracoes
 {
