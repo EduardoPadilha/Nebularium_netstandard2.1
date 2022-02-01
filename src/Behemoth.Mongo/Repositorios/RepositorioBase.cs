@@ -17,6 +17,6 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
                 contexto.ObterColecao<TEntidade>(NomeColecao);
         }
 
-        protected virtual string NomeColecao => typeof(TEntidade).Name.SnakeCase();
+        protected virtual string NomeColecao => null;
     }
 }

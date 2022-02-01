@@ -78,7 +78,7 @@ namespace Nebularium.Behemoth.Mongo.Contextos
         public virtual IMongoCollection<T> ObterColecao<T>()
         {
             var nome = typeof(T).ObterAnotacao<NomeAttribute>()?.Nome;
-            return ObterColecao<T>(nome.LimpoNuloBranco() ? typeof(T).Name : nome);
+            return ObterColecao<T>(nome.LimpoNuloBranco() ? typeof(T).Name.SnakeCase() : nome);
         }
 
         public virtual IMongoCollection<T> ObterColecao<T>(string nomeColecao)
