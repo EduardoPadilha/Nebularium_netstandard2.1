@@ -54,7 +54,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
 
         #region Implementação de suporte para as consultas
 
-        protected async Task<IEnumerable<TEntidade>> ProcessarBuscas(IMongoQueryable<TProxy> query, IPaginador paginador)
+        protected virtual async Task<IEnumerable<TEntidade>> ProcessarBuscas(IMongoQueryable<TProxy> query, IPaginador paginador)
         {
             if (paginador == null)
                 return await query.ToListAsync().ComoAsync<List<TProxy>, IEnumerable<TEntidade>>();

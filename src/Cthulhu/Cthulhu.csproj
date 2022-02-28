@@ -7,7 +7,7 @@
     <PackageId>Cthulhu</PackageId>
     <Company>Deflagra</Company>
     <Product>Nebularium.Cthulhu</Product>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Description>Biblioteca para utilização em projetos Azure Functions.</Description>
     <PackageId>Nebularium.Cthulhu</PackageId>
     <RepositoryUrl>https://github.com/EduardoPadilha/Nebularium</RepositoryUrl>

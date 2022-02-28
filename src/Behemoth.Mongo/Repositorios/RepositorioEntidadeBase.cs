@@ -49,14 +49,14 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
 
         #region Implementação de suporte para as consultas
 
-        private IFindFluent<TEntidade, TEntidade> Pagina(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
+        protected virtual IFindFluent<TEntidade, TEntidade> Paginar(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
         {
             if (paginador.TotalRegistros == 0)
                 return default;
             return query.Skip((paginador.Pagina - 1) * paginador.TamanhoPagina).Limit(paginador.TamanhoPagina);
         }
 
-        protected async Task<IEnumerable<TEntidade>> ProcessarBuscas(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
+        protected virtual async Task<IEnumerable<TEntidade>> ProcessarBuscas(IFindFluent<TEntidade, TEntidade> query, IPaginador paginador)
         {
             if (paginador == null)
                 return await OrdenacaoPadrao(query).ToListAsync();
@@ -65,7 +65,7 @@ namespace Nebularium.Behemoth.Mongo.Repositorios
 
             paginador.IniciaPaginador(total);
             var queryOrdenada = OrdenacaoPadrao(query);
-            var queryPaginada = Pagina(queryOrdenada, paginador);
+            var queryPaginada = Paginar(queryOrdenada, paginador);
             if (queryPaginada == default)
                 return default;
 

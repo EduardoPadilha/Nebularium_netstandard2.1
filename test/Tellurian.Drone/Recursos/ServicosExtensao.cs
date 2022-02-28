@@ -8,6 +8,7 @@ using Nebularium.Tarrasque.Abstracoes;
 using Nebularium.Tarrasque.Configuracoes;
 using Nebularium.Tarrasque.Extensoes;
 using Nebularium.Tarrasque.Recursos;
+//using Nebularium.Tarrasque.Recursos;
 using Nebularium.Tellurian.Drone.Behemoth.Repositorios;
 using Nebularium.Tellurian.Drone.Eventos;
 using Nebularium.Tellurian.Drone.Features;
@@ -46,7 +47,7 @@ namespace Nebularium.Tellurian.Drone.Recursos
                                 .CreateLogger(), true);
             });
 
-            servicos.AddSingletonTodosPorInterface(typeof(IValidador<>), typeof(ServicoExtensao));
+            servicos.AddSingletonTodosPorInterface(typeof(IValidador<>), typeof(ServicosExtensao));
             servicos.AddSingleton<IGestorConfiguracao, GestorConfiguracaoPadrao>();
             servicos.AddSingleton<IDisplayNameExtrator>(sp => new DisplayNameExtratorPadrao());
 

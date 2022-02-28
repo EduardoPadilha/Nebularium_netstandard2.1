@@ -40,9 +40,8 @@ namespace Nebularium.Cthulhu.Abstracoes
                     var todos = chaveLinha.limpoNuloBrancoOuZero();
                     return todos ? ObterTodosAsync(req, log, chaveParticao) : ObterPorIdAsync(log, chaveParticao, chaveLinha);
                 case VerboHTTP.POST:
-                    return AdicionarAsync(req, log, chaveParticao);
                 case VerboHTTP.PUT:
-                    return AtualizarAsync(req, log, chaveParticao, chaveLinha);
+                    return SalvarAsync(req, log, chaveParticao, chaveLinha);
                 case VerboHTTP.DELETE:
                     return DeletarAsync(log, chaveParticao, chaveLinha);
                 default:
@@ -88,12 +87,14 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public virtual async Task<IActionResult> AdicionarAsync(HttpRequest req, ILogger log, string chaveParticao)
+        public virtual async Task<IActionResult> SalvarAsync(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
         {
             var content = await new StreamReader(req.Body).ReadToEndAsync();
             try
             {
-                var resultado = await SalvarAsync(content, chaveParticao);
+                var verbo = Enum.Parse<VerboHTTP>(req.Method);
+                var adicionar = verbo == VerboHTTP.POST;
+                var resultado = await TratarFluxoSalvarAsync(adicionar, content, chaveParticao, chaveLinha);
                 return RetornarSucesso<TDto>(resultado);
             }
             catch (ValidacaoExcecao e)
@@ -106,22 +107,20 @@ namespace Nebularium.Cthulhu.Abstracoes
             }
         }
 
-        public virtual async Task<IActionResult> AtualizarAsync(HttpRequest req, ILogger log, string chaveParticao, string chaveLinha)
+        protected virtual async Task<TEntidade> TratarFluxoSalvarAsync(bool adicionar, string body, string chaveParticao, string chaveLinha = null)
         {
-            var content = await new StreamReader(req.Body).ReadToEndAsync();
-            try
-            {
-                var resultado = await SalvarAsync(content, chaveParticao, chaveLinha);
-                return RetornarSucesso<TDto>(resultado);
-            }
-            catch (ValidacaoExcecao e)
-            {
-                return RetornaFalha(log, JsonConvert.SerializeObject(e.Erros));
-            }
-            catch (Exception e)
-            {
-                return RetornaFalha(log, e.GetBaseException().Message);
-            }
+
+            var dto = JsonConvert.DeserializeObject<TDto>(body);
+            var entidade = dto.Como<TEntidade>();
+            entidade = PreencheChaveParticao(entidade, chaveParticao);
+            entidade = PreencheChaveLinha(entidade, chaveLinha);
+            if (adicionar)
+                return await servico.AdicionarAsync(entidade);
+
+            var resultado = await servico.AtualizarAsync(entidade);
+            if (resultado) return entidade;
+
+            throw new Exception("Não foi possível atualizar o registro, contate o administrador");
         }
 
         public virtual async Task<IActionResult> DeletarAsync(ILogger log, string chaveParticao, string chaveLinha)
@@ -141,21 +140,6 @@ namespace Nebularium.Cthulhu.Abstracoes
             {
                 return RetornaFalha(log, e.GetBaseException().Message);
             }
-        }
-
-        protected virtual async Task<TEntidade> SalvarAsync(string body, string chaveParticao, string chaveLinha = null)
-        {
-            var dto = JsonConvert.DeserializeObject<TDto>(body);
-            var entidade = dto.Como<TEntidade>();
-            entidade = PreencheChaveParticao(entidade, chaveParticao);
-            if (chaveLinha.LimpoNuloBranco())
-                return await servico.AdicionarAsync(entidade);
-
-            entidade = PreencheChaveLinha(entidade, chaveLinha);
-            var resultado = await servico.AtualizarAsync(entidade);
-            if (resultado) return entidade;
-
-            throw new Exception("Não foi possível atualizar o registro, contate o administrador");
         }
 
         #region Metodos de suporte

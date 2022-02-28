@@ -18,7 +18,7 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
         {
         }
 
-        public async Task AdicionarAsync(TEntidade entidade)
+        public virtual async Task AdicionarAsync(TEntidade entidade)
         {
             if (entidade == null)
                 throw new ArgumentNullException("entidade");
@@ -38,7 +38,7 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             }
         }
 
-        public async Task<bool> AtualizarAsync(TEntidade entidade)
+        public virtual async Task<bool> AtualizarAsync(TEntidade entidade)
         {
             if (entidade == null)
                 throw new ArgumentNullException("entidade");
@@ -60,7 +60,7 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             }
         }
 
-        public async Task<bool> RemoverAsync(TEntidade entidade)
+        public virtual async Task<bool> RemoverAsync(TEntidade entidade)
         {
             var proxy = entidade.Como<TProxy>();
             proxy.ETag = "*";
@@ -70,14 +70,14 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             return resultado != null;
         }
 
-        private TProxy Obter(string chaveParticao, string chaveLinha)
+        protected virtual TProxy Obter(string chaveParticao, string chaveLinha)
         {
             return tabela.CreateQuery<TProxy>()
                  .Where(x => x.PartitionKey == chaveParticao && x.RowKey == chaveLinha)
                  .SingleOrDefault();
         }
 
-        public Task<TEntidade> ObterAsync(string chaveParticao, string chaveLinha)
+        public virtual Task<TEntidade> ObterAsync(string chaveParticao, string chaveLinha)
         {
             var retorno = Obter(chaveParticao, chaveLinha);
 
@@ -85,14 +85,14 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             return Task.FromResult(convertido);
         }
 
-        public Task<IEnumerable<TEntidade>> ObterTodosAsync(string chaveParticao, IPaginador paginador = null)
+        public virtual Task<IEnumerable<TEntidade>> ObterTodosAsync(string chaveParticao, IPaginador paginador = null)
         {
             var query = tabela.CreateQuery<TProxy>().Where(x => x.PartitionKey == chaveParticao).ToList();
             var processados = ProcessarBuscas(query, paginador);
             return Task.FromResult(processados);
         }
 
-        private IEnumerable<TProxy> Pagina(IEnumerable<TProxy> query, IPaginador paginador)
+        protected virtual IEnumerable<TProxy> Paginar(IEnumerable<TProxy> query, IPaginador paginador)
         {
             if (paginador.TotalRegistros == 0)
                 return default;
@@ -104,7 +104,7 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
             return query.OrderBy(c => c.RowKey);
         }
 
-        protected IEnumerable<TEntidade> ProcessarBuscas(IEnumerable<TProxy> lista, IPaginador paginador)
+        protected virtual IEnumerable<TEntidade> ProcessarBuscas(IEnumerable<TProxy> lista, IPaginador paginador)
         {
             if (paginador == null)
                 return OrdenacaoPadrao(lista).Como<List<TEntidade>>();
@@ -113,7 +113,7 @@ namespace Nebularium.Behemoth.Azure.Tables.Repositorios
 
             paginador.IniciaPaginador(total);
             var queryOrdenada = OrdenacaoPadrao(lista);
-            var queryPaginada = Pagina(queryOrdenada, paginador);
+            var queryPaginada = Paginar(queryOrdenada, paginador);
             if (queryPaginada == default)
                 return default;
 
