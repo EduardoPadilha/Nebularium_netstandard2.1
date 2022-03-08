@@ -15,9 +15,19 @@ using System.Threading.Tasks;
 
 namespace Nebularium.Cthulhu.Abstracoes
 {
-    public abstract class FuncaoCrudTabelar<TEntidade, TDto>
-        where TEntidade : new()
-        where TDto : class, new()
+    public abstract class FuncaoCrudTabelar<TEntidade, TDto> : FuncaoCrudTabelar<TEntidade, TDto, TDto>
+       where TEntidade : new()
+       where TDto : class, new()
+    {
+        protected FuncaoCrudTabelar(ITabelarServico<TEntidade> servico) : base(servico)
+        {
+        }
+    }
+
+    public abstract class FuncaoCrudTabelar<TEntidade, TDtoIn, TDtoOut>
+    where TEntidade : new()
+    where TDtoIn : class, new()
+        where TDtoOut : class, new()
     {
         protected readonly ITabelarServico<TEntidade> servico;
 
@@ -55,7 +65,7 @@ namespace Nebularium.Cthulhu.Abstracoes
             {
                 var paginacao = CriarPaginacao(req);
                 var resultado = await servico.ObterTodosAsync(chaveParticao, paginacao);
-                return RetornarSucesso<IEnumerable<TDto>>(resultado);
+                return RetornarSucesso<IEnumerable<TDtoOut>>(resultado);
             }
             catch (ValidacaoExcecao e)
             {
@@ -75,7 +85,7 @@ namespace Nebularium.Cthulhu.Abstracoes
                 if (resultado == null)
                     return RetornaFalha(log, "Registro não encontrado");
 
-                return RetornarSucesso<TDto>(resultado);
+                return RetornarSucesso<TDtoOut>(resultado);
             }
             catch (ValidacaoExcecao e)
             {
@@ -95,7 +105,7 @@ namespace Nebularium.Cthulhu.Abstracoes
                 var verbo = Enum.Parse<VerboHTTP>(req.Method);
                 var adicionar = verbo == VerboHTTP.POST;
                 var resultado = await TratarFluxoSalvarAsync(adicionar, content, chaveParticao, chaveLinha);
-                return RetornarSucesso<TDto>(resultado);
+                return RetornarSucesso<TDtoIn>(resultado);
             }
             catch (ValidacaoExcecao e)
             {
@@ -110,7 +120,7 @@ namespace Nebularium.Cthulhu.Abstracoes
         protected virtual async Task<TEntidade> TratarFluxoSalvarAsync(bool adicionar, string body, string chaveParticao, string chaveLinha = null)
         {
 
-            var dto = JsonConvert.DeserializeObject<TDto>(body);
+            var dto = JsonConvert.DeserializeObject<TDtoIn>(body);
             var entidade = dto.Como<TEntidade>();
             entidade = PreencheChaveParticao(entidade, chaveParticao);
             entidade = PreencheChaveLinha(entidade, chaveLinha);
